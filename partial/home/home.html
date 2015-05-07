@@ -1,0 +1,13 @@
+<div>
+    <div class="col-md-2">
+        <pre id='data-debug'>{{dataService.data | json}}</pre>
+    </div>
+    <div class="col-md-10">
+        <div>
+            <button ng-click="dataService.flush()">flush</button>
+        </div>
+        <div class="character-class-container">
+            <character-class on-repeat-events ng-repeat="class in dataService.data.classes" index="$index"/>
+        </div>
+    </div>
+</div>
