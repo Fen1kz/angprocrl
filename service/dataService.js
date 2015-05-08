@@ -1,45 +1,43 @@
 angular.module('AndProcRLData').factory('dataService',function($rootScope) {
-    var defaultData = {
-        classes: [{
-            id: 'Adventurer',
-            req: null
-        }, {
-            id: 'Fighter',
-            parent: 'Adventurer'
-        }, {
-            id: 'Bandit',
-            parent: 'Adventurer'
-        },{
-            id: 'Rogue',
-            parent: 'Bandit'
-        },{
-            id: 'Ranger',
-            parent: 'Bandit'
-        },{
-            id: 'Secret'
-        }, {
-            id: 'SecretChild',
-            parent: 'Secret'
-        }]
-    };
-
 	var dataService = {
         data: {}
         ,get defaultData() {
-            return angular.extend({}, defaultData);
+            return  {
+                classes: [{
+                    id: 'Adventurer',
+                    req: null
+                }, {
+                    id: 'Fighter',
+                    parent: 'Adventurer'
+                }, {
+                    id: 'Bandit',
+                    parent: 'Adventurer'
+                },{
+                    id: 'Rogue',
+                    parent: 'Bandit'
+                },{
+                    id: 'Ranger',
+                    parent: 'Bandit'
+                },{
+                    id: 'Secret'
+                }, {
+                    id: 'SecretChild',
+                    parent: 'Secret'
+                }]
+            };
         }
         ,init: function(){
-            dataService.load('data');
+            dataService.load('data', dataService.defaultData);
             dataService.update();
         }
         ,save: function(key, value) {
             dataService.data = value;
             localStorage.setItem(key, angular.toJson(value));
         }
-        ,load: function(key) {
+        ,load: function(key, defaultData) {
             var data = angular.fromJson(localStorage.getItem(key));
             if (!data) {
-                data = dataService.defaultData;
+                data = defaultData;
             }
             dataService.data = data;
             return data;
@@ -56,6 +54,14 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             console.log('classes:update')
             $rootScope.$broadcast('classes:update');
             dataService.save('data', dataService.data);
+        }
+        ,getClassesIndexes: function(parent) {
+            return _.reduce(dataService.data.classes, function(memo, e, index) {
+                if (e.parent == parent) {
+                    memo.push(index);
+                }
+                return memo;
+            }, []);
         }
         ,getClasses: function(parent) {
             var _fn = (parent === void 0) ? _.reject : _.filter;
@@ -75,9 +81,6 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             dataService.update();
         }
         ,removeClass: function(model) {
-            if (!confirm('rly?')) {
-                return;
-            }
             _.remove(dataService.data.classes, 'id', model.id);
 
             dataService.update();

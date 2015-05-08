@@ -3,43 +3,60 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
 		restrict: 'E',
 		replace: true,
 		scope: {
-            model: '='
-            //,index: '='
+            //model: '='
+            index: '='
 		},
 		templateUrl: 'directive/character-class/character-class.html',
 		link: function($scope, $e, attrs, fn) {
-            //$scope.model = dataService.data.classes[$scope.index];
-            $scope.service = dataService;
+            $scope.model = dataService.data.classes[$scope.index];
+            //$scope.service = dataService;
 
 
             var recompileChildren = function() {
-                $scope.$broadcast('classes:destroy scope', $scope);
+                $scope.$broadcast('classes:destroy', $scope);
+
                 //$e.find('.character-class-children').remove();
-                $scope.childClasses = dataService.getClasses($scope.model.id);
-                if ($scope.childClasses.length > 0) {
-                    $compile('<div class="character-class-children"><character-class ng-repeat="class in childClasses" model="class"/></div>')($scope, function(cloned, scope){
-                        debugger;
+                $scope.childClassesIndexes = dataService.getClassesIndexes($scope.model.id);
+                console.log($scope.model.id,'compiling',$scope.childClassesIndexes)
+                if ($scope.childClassesIndexes.length > 0) {
+                    $compile('<div class="character-class-children"><character-class ng-repeat="index in childClassesIndexes" index="index"/></div>')($scope, function(cloned, scope){
                         $e.append(cloned);
                     });
                 }
             };
-            //$scope.$on('classes:update', recompileChildren);
             recompileChildren();
+            //$scope.$on('classes:update', recompileChildren);
+
+            $scope.recompile = recompileChildren;
+            $scope.custom1 = function(){
+                $scope.$broadcast('classes:destroy', $scope);
+            };
 
 
-            $scope.$on('classes:destroy scope', function(event, scope){
-                console.log('someone tries to destroy', $scope.model.id,
-                    'and my scope equlity: ', $scope.$id === scope.$id
-                    )
+            $scope.$on('classes:destroy', function(event, scope){
+                console.log('classes:destroy scope for ', $scope.model.id, ': ', $scope.$id !== scope.$id)
                 if ($scope.$id !== scope.$id) {
-                    $scope.$destroy();
+                    $scope.$evalAsync(function(){
+                        $scope.$destroy();
+                    });
                 }
             });
 
             $scope.$on('$destroy', function(){
                 console.log('huh, im destroyed', $scope.model.id)
+                dataService.removeClass($scope.model);
+                var $parent = $e.parent('.character-class-children');
                 $e.remove();
-                console.log($e);
+                if ($parent.children('.character-class-wrapper').length === 0) {
+                    $parent.remove();
+                }
+            });
+
+            $scope.$on('class:removed', function(e){
+                console.log($scope.model.id, 'my child is removed!');
+                e.stopPropagation();
+                recompileChildren();
+                //console.log($e);
             });
 
             $scope.$watch('model.id', function(newValue, oldValue) {
@@ -50,12 +67,6 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                 });
             });
 
-            //$scope.$watch('model._gfx', function(newValue, oldValue) {
-            //    //console.log($scope.model.id, 'MODEL', newValue, oldValue)
-            //    $e.css('left', $scope.model._gfx.x);
-            //    $e.css('top', $scope.model._gfx.y);
-            //});
-
             $scope.add = function(){
                 console.log($scope.model.id, "ADD")
                 dataService.addClass($scope.model);
@@ -64,8 +75,13 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
 
             $scope.remove = function(){
                 console.log("REMOVE")
-                dataService.removeClass($scope.model);
-                $scope.$broadcast('$destroy');
+                if (!confirm('rly?')) {
+                    return;
+                }
+                //$scope.$evalAsync(function(){
+                    $scope.$parent.$emit('class:removed')
+                //});
+                //$scope.$destroy();
             };
 
             $scope.edit = function($event) {
