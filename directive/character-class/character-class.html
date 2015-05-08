@@ -1,13 +1,21 @@
 <div class="character-class">
     <!--<div class="element">{{model.id}}</div>-->
     <div class="controls">
-        <button><</button>
+        <button class="control"><</button>
     </div>
     <div class="element">
-        {{model.id}}
-        <!--<input ng-model="model.id"/>-->
+        <span ng-show="!editing" ng-click="edit($event)">{{model.id}}</span>
+        <input
+            ng-show="editing"
+            ng-model="model.id"
+            data-rl-unique="{
+                index: index,
+            }"
+            required
+            />
     </div>
-    <div class="controls">
-        <button ng-click="add()">+</button>
+    <div class="controls right">
+        <button class="control" ng-click="add()">+</button>
+        <button class="control" ng-click="remove()">-</button>
     </div>
 </div>

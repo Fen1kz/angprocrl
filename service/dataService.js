@@ -7,18 +7,20 @@ angular.module('AndProcRLData').factory('dataService',function() {
             id: 'Fighter',
             parent: 'Adventurer'
         }, {
+            id: 'Bandit',
+            parent: 'Adventurer'
+        }, {
             id: 'Secret'
+        }, {
+            id: 'SecretChild',
+            parent: 'Secret'
         }]
-    }
+    };
 
 	var dataService = {
         data: {}
-        ,update: function() {
-            dataService.data.classes = makeTree(dataService.data.classes, {
-                yAddition: 40,
-                xMultiplier: 150
-            });
-            dataService.save('data', dataService.data);
+        ,get defaultData() {
+            return angular.extend({}, defaultData);
         }
         ,save: function(key, value) {
             dataService.data = value;
@@ -28,60 +30,85 @@ angular.module('AndProcRLData').factory('dataService',function() {
             var data = angular.fromJson(localStorage.getItem(key));
             if (data) {
                 dataService.data = data;
+            } else {
+                dataService.save('data', dataService.data);
             }
             return data;
         }
         ,flush: function(key) {
             localStorage.removeItem(key);
-            dataService.save('data', defaultData)
-            dataService.update()
+            dataService.data = dataService.defaultData;
+            dataService.update();
         }
-        ,addClass: function(model) {
-            console.log('adcls', model);
-            dataService.data.classes.push({
-                id: 'newfag'+Math.random(),
-                parent: model.id
-            });
-
+        ,update: function() {
             dataService.data.classes = makeTree(dataService.data.classes, {
                 yAddition: 40,
                 xMultiplier: 150
+            }).classes;
+            dataService.save('data', dataService.data);
+        }
+        ,addClass: function(model) {
+            if (_.some(dataService.data.classes, 'id', 'newClass')) {
+                return;
+            }
+            dataService.data.classes.push({
+                id: 'newClass',
+                parent: model.id
             });
+
+            dataService.update();
+        }
+        ,removeClass: function(model) {
+            _.remove(dataService.data.classes, 'id', model.id);
+
+            dataService.update();
         }
     };
+    dataService.load('data');
+    window.dataService = dataService;
 
     function makeTree(classes, data) {
         //console.log('Going to Find Children of ', data.id);
-        var offset = data.offset || 20;
+        var offset = data.offset || 0;
         var level = data.level || 0;
+        var childcount = 0;
         classes.forEach(function(e, index) {
             //console.log('I am searching for child of (',data.id,') on ', e.id,' who has parent ', e.parent);
             if (data.id === e.parent) {
-                //console.log('I\'ve found child of (',data.id,') - it is ['+e.id+']');
+                childcount++;
+                //console.log('I\'ve found child of (',data.id,') - it is ['+e.id+']', 'with offset', offset);
 
                 classes[index]._gfx = {
                     x: level * data.xMultiplier,
                     y: offset
-                }
+                };
 
-                classes = makeTree(classes, {
+                var makeTreeReturn = makeTree(classes, {
                     id: e.id,
                     xMultiplier: data.xMultiplier,
                     yAddition: data.yAddition,
                     level: level + 1,
                     offset: offset
-                })
+                });
 
-                offset += data.yAddition;
+
+                if (makeTreeReturn.childcount === 0) {
+                    //console.log(e.id, ' has no childs -- we add 40 to ', offset);
+                    offset += data.yAddition;
+                } else {
+                    //console.log(e.id, ' has childs! we make offset', makeTreeReturn.offset);
+                    offset = makeTreeReturn.offset;
+                }
+
+                classes = makeTreeReturn.classes;
             }
             //console.log('I am searching for child of (',id,') on ', e.id,' who has parent ', e.parent);
         });
-        return classes;
+        return {
+            offset: offset,
+            classes: classes,
+            childcount: childcount
+        };
     }
-
-    if (!dataService.load('data')) {
-        dataService.save('data', defaultData)
-    }
-
 	return dataService;
 });
