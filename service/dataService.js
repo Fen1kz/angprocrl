@@ -3,27 +3,27 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
         data: {}
         ,get defaultData() {
             return  {
-                classes: [{
-                    id: 'Adventurer',
-                    req: null
-                }, {
-                    id: 'Fighter',
-                    parent: 'Adventurer'
-                }, {
-                    id: 'Bandit',
-                    parent: 'Adventurer'
-                },{
-                    id: 'Rogue',
-                    parent: 'Bandit'
-                },{
-                    id: 'Ranger',
-                    parent: 'Bandit'
-                },{
-                    id: 'Secret'
-                }, {
-                    id: 'SecretChild',
-                    parent: 'Secret'
-                }]
+                classes: {
+                    'Adventurer': {
+                        req: null
+                    },
+                    'Fighter': {
+                        parent: 'Adventurer'
+                    },
+                    'Bandit': {
+                        parent: 'Adventurer'
+                    },
+                    'Rogue': {
+                        parent: 'Bandit'
+                    },
+                    'Ranger': {
+                        parent: 'Bandit'
+                    },
+                    'Secret': {},
+                    'SecretChild': {
+                        parent: 'Secret'
+                    }
+                }
             };
         }
         ,init: function(){
@@ -47,18 +47,14 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             dataService.init();
         }
         ,update: function() {
-            //dataService.data.classes = makeTree(dataService.data.classes, {
-            //    yAddition: 40,
-            //    xMultiplier: 150
-            //}).classes;
             console.log('classes:update')
             $rootScope.$broadcast('classes:update');
             dataService.save('data', dataService.data);
         }
         ,getClassesIndexes: function(parent) {
-            return _.reduce(dataService.data.classes, function(memo, e, index) {
+            return _.reduce(dataService.data.classes, function(memo, e, id) {
                 if (e.parent == parent) {
-                    memo.push(index);
+                    memo.push(id);
                 }
                 return memo;
             }, []);
@@ -69,68 +65,24 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             return _fn(dataService.data.classes, 'parent', parent);
         }
         ,addClass: function(model) {
-            if (_.some(dataService.data.classes, 'id', 'newClass')) {
+            if (_.some(dataService.data.classes, 'newClass')) {
                 alert('dupe!');
                 return;
             }
-            dataService.data.classes.push({
-                id: 'newClass',
+            dataService.data.classes['newClass'] = {
                 parent: model.id
-            });
+            };
 
             dataService.update();
         }
         ,removeClass: function(model) {
-            _.remove(dataService.data.classes, 'id', model.id);
+            //_.remove(dataService.data.classes, 'id', model.id);
+            delete dataService.data.classes[model.id];
 
             dataService.update();
         }
     };
     dataService.init();
     window.dataService = dataService;
-
-    function makeTree(classes, data) {
-        //console.log('Going to Find Children of ', data.id);
-        var offset = data.offset || 0;
-        var level = data.level || 0;
-        var childcount = 0;
-        classes.forEach(function(e, index) {
-            //console.log('I am searching for child of (',data.id,') on ', e.id,' who has parent ', e.parent);
-            if (data.id === e.parent) {
-                childcount++;
-                //console.log('I\'ve found child of (',data.id,') - it is ['+e.id+']', 'with offset', offset);
-
-                classes[index]._gfx = {
-                    x: level * data.xMultiplier,
-                    y: offset
-                };
-
-                var makeTreeReturn = makeTree(classes, {
-                    id: e.id,
-                    xMultiplier: data.xMultiplier,
-                    yAddition: data.yAddition,
-                    level: level + 1,
-                    offset: offset
-                });
-
-
-                if (makeTreeReturn.childcount === 0) {
-                    //console.log(e.id, ' has no childs -- we add 40 to ', offset);
-                    offset += data.yAddition;
-                } else {
-                    //console.log(e.id, ' has childs! we make offset', makeTreeReturn.offset);
-                    offset = makeTreeReturn.offset;
-                }
-
-                classes = makeTreeReturn.classes;
-            }
-            //console.log('I am searching for child of (',id,') on ', e.id,' who has parent ', e.parent);
-        });
-        return {
-            offset: offset,
-            classes: classes,
-            childcount: childcount
-        };
-    }
 	return dataService;
 });

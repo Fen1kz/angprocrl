@@ -8,7 +8,7 @@
             <span ng-show="!editing" ng-click="edit($event)">{{model.id}}</span>
             <input
                 ng-show="editing"
-                ng-model="model.id"
+                ng-model="editModel.id"
                 data-rl-unique="{
                     index: index,
                 }"
@@ -18,8 +18,6 @@
         <div class="controls right">
             <button class="control" ng-click="add()">+</button>
             <button class="control" ng-click="remove()">-</button>
-            <button class="control" ng-click="custom1()">C1</button>
-            <button class="control" ng-click="recompile()">R</button>
         </div>
     </div>
     <!--<div class="character-class-children">-->
