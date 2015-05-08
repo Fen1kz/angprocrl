@@ -65,7 +65,7 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             return _fn(dataService.data.classes, 'parent', parent);
         }
         ,addClass: function(model) {
-            if (_.some(dataService.data.classes, 'newClass')) {
+            if (_.some(_.keys(dataService.data.classes), 'newClass')) {
                 alert('dupe!');
                 return;
             }
