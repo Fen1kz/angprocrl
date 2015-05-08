@@ -50,9 +50,10 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                             keyCode == 13
                             || $(e.target).parents('.element').length == 0
                         )
-                        && $(e.target).is('.ng-valid')
+                        && $e.find('input[ng-model="model.id"]').is('.ng-valid')
                     ) {
                         $document.off('click', listener);
+                        $document.off('keyup', listener);
                         $scope.$apply(function() {
                             $scope.editing = false;
                         });
