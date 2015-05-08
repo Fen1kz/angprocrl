@@ -1,4 +1,4 @@
-angular.module('AndProcRLData').factory('dataService',function() {
+angular.module('AndProcRLData').factory('dataService',function($rootScope) {
     var defaultData = {
         classes: [{
             id: 'Adventurer',
@@ -51,6 +51,8 @@ angular.module('AndProcRLData').factory('dataService',function() {
             //    yAddition: 40,
             //    xMultiplier: 150
             //}).classes;
+            console.log('classes:update')
+            $rootScope.$broadcast('classes:update');
             dataService.save('data', dataService.data);
         }
         ,getClasses: function(parent) {
@@ -60,6 +62,7 @@ angular.module('AndProcRLData').factory('dataService',function() {
         }
         ,addClass: function(model) {
             if (_.some(dataService.data.classes, 'id', 'newClass')) {
+                alert('dupe!');
                 return;
             }
             dataService.data.classes.push({
@@ -70,6 +73,9 @@ angular.module('AndProcRLData').factory('dataService',function() {
             dataService.update();
         }
         ,removeClass: function(model) {
+            if (!confirm('rly?')) {
+                return;
+            }
             _.remove(dataService.data.classes, 'id', model.id);
 
             dataService.update();

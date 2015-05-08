@@ -9,12 +9,20 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
 		templateUrl: 'directive/character-class/character-class.html',
 		link: function($scope, $e, attrs, fn) {
             //$scope.model = dataService.data.classes[$scope.index];
-            //$scope.service = dataService;
-            $scope.childClasses = dataService.getClasses($scope.model.id);
+            $scope.service = dataService;
 
-            if ($scope.childClasses.length > 0) {
-                $e.append($compile('<div class="character-class-children"><character-class ng-repeat="class in childClasses" model="class"/></div>')($scope));
-            }
+
+            var recompile = function() {
+                $e.find('.character-class-children').remove();
+                $scope.childClasses = dataService.getClasses($scope.model.id);
+                if ($scope.childClasses.length > 0) {
+                    $compile('<div class="character-class-children"><character-class ng-repeat="class in childClasses" model="class"/></div>')($scope, function(cloned, scope){
+                        $e.append(cloned);
+                    });
+                }
+            };
+            $scope.$on('classes:update', recompile);
+            recompile();
 
             $scope.$watch('model.id', function(newValue, oldValue) {
                 _.each(dataService.data.classes, function(e){
