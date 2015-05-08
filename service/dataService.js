@@ -1,9 +1,9 @@
-angular.module('AndProcRLData').factory('dataService',function($rootScope) {
+angular.module('AndProcRLData').service('dataService',function($rootScope) {
 	var dataService = {
         data: {}
         ,get defaultData() {
-            return  {
-                classes: {
+            var defaultData = {};
+                defaultData.classes = _.mapValues({
                     'Adventurer': {
                         req: null
                     },
@@ -18,13 +18,12 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
                     },
                     'Ranger': {
                         parent: 'Bandit'
-                    },
-                    'Secret': {},
-                    'SecretChild': {
-                        parent: 'Secret'
                     }
-                }
-            };
+                }, function(e, id){
+                    e.id = id;
+                    return e;
+                });
+            return defaultData;
         }
         ,init: function(){
             dataService.load('data', dataService.defaultData);
@@ -46,11 +45,8 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             localStorage.removeItem('data');
             dataService.init();
         }
-        ,update: function() {
-            console.log('classes:update')
-            $rootScope.$broadcast('classes:update');
-        }
         ,getClassesIndexes: function(parent) {
+            console.log('getClassesIndexes called by ', parent)
             return _.reduce(dataService.data.classes, function(memo, e, id) {
                 if (e.parent == parent) {
                     memo.push(id);
@@ -63,6 +59,10 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             console.log('asked for', parent, 'got', _fn(dataService.data.classes, 'parent', parent));
             return _fn(dataService.data.classes, 'parent', parent);
         }
+        ,update: function() {
+            console.log('classes:update')
+            $rootScope.$broadcast('classes:update');
+        }
         ,addClass: function(model) {
             if (_.some(_.keys(dataService.data.classes), 'newClass')) {
                 alert('dupe!');
@@ -72,13 +72,13 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
                 parent: model.id
             };
 
-            dataService.save('data', dataService.data);
+            dataService.update();
         }
         ,removeClass: function(model) {
             //_.remove(dataService.data.classes, 'id', model.id);
             delete dataService.data.classes[model.id];
 
-            dataService.save('data', dataService.data);
+            dataService.update();
         }
     };
     dataService.init();

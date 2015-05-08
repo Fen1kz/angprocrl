@@ -1,7 +1,7 @@
 <div class="character-class-wrapper">
-    <div class="character-class" data-class="{{model.id}}">
+    <div class="character-class" data-character-class="{{model.id}}">
     <!--<div class="element">{{model.id}}</div>-->
-        <div class="controls">
+        <div class="controls" ng-show="model.parent">
             <button class="position"><</button>
         </div>
         <div class="element">
@@ -15,6 +15,7 @@
                 required
                 />
         </div>
+        <!--<div><pre>{{childClassesIndexes | json}}</pre></div>-->
         <div class="controls right">
             <button class="control" ng-click="add()">+</button>
             <button class="control" ng-click="remove()">-</button>

@@ -19,20 +19,34 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                 });
             });
 
-            var recompileChildren = function() {
-                $scope.$broadcast('classes:destroy', $scope);
+            $scope.childClassesIndexes = dataService.getClassesIndexes($scope.model.id);
 
-                //$e.find('.character-class-children').remove();
-                $scope.childClassesIndexes = dataService.getClassesIndexes($scope.model.id);
-
-                console.log($scope.model.id,'compiling',$scope.childClassesIndexes)
+            var compileChildren = function() {
                 if ($scope.childClassesIndexes.length > 0) {
-                    $compile('<div class="character-class-children"><character-class ng-repeat="index in childClassesIndexes" index="index"/></div>')($scope, function(cloned, scope){
+                    $compile('<div class="character-class-children"><character-class ng-repeat="index in childClassesIndexes" index="index"/></div>')($scope, function (cloned, scope) {
                         $e.append(cloned);
                     });
                 }
             };
-            recompileChildren();
+            compileChildren();
+
+            $scope.$on('classes:update', function(event, $id){
+                if ($scope.$id !== $id) {
+                    $scope.childClassesIndexes = dataService.getClassesIndexes($scope.model.id);
+                    if ($e.find('.character-class-children').length === 0) {
+                        compileChildren();
+                    }
+                }
+            });
+
+            $scope.$on('$destroy', function() {
+                console.log('im destroyd', $scope.model.id);
+                //var $parent = $e.parent('.character-class-children');
+                //$e.remove();
+                //if ($parent.children('.character-class-wrapper').length === 0) {
+                //    $parent.remove();
+                //}
+            });
 
             var droptarget;
             $e.find('.position').on('mousedown', function(e) {
@@ -62,7 +76,7 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                 });
                 $document.on('mouseup.class.position', function(){
                     $document.off('.class.position');
-                    var targetClass = $('.dropzone').attr('data-class');
+                    var targetClass = $('.dropzone').attr('data-character-class');
                     $('.dropzone').removeClass('dropzone');
                     $target.remove();
 
@@ -70,41 +84,21 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                     //delete dataService.data.classes[$scope.index];
                     if (targetClass) {
                         $scope.model.parent = targetClass;
+                        $scope.$apply();
+                        $rootScope.$broadcast('classes:update', $scope.$id);
+                        $scope.$apply();
                     }
                     //$rootScope('')
                 });
             });
 
-            $scope.$on('classes:destroy', function(event, scope){
-                if ($scope.$id !== scope.$id) {
-                    $scope.$evalAsync(function(){
-                        $scope.$destroy();
-                    });
-                }
-            });
-
-            $scope.$on('$destroy', function() {
-                var $parent = $e.parent('.character-class-children');
-                $e.remove();
-                if ($parent.children('.character-class-wrapper').length === 0) {
-                    $parent.remove();
-                }
-            });
-
-            $scope.$on('class:removed', function(e){
-                e.stopPropagation();
-                recompileChildren();
-            });
-
             $scope.add = function(){
                 dataService.addClass($scope.model);
-                recompileChildren();
             };
 
             $scope.remove = function(){
                 if (!confirm('rly?')) return;
                 dataService.removeClass($scope.model);
-                $scope.$parent.$emit('class:removed');
             };
 
             $scope.edit = function($event) {
@@ -121,7 +115,7 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                     if (
                         (
                             keyCode == 13
-                            || $(e.currentTarget).parents('.element').length == 0
+                            || $(e.target).parents('.element').length === 0
                         )
                         && $e.find('input[ng-model*=".id"]').is('.ng-valid')
                     ) {
@@ -146,8 +140,6 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
             /*
             * DEPRECATED
             * */
-
-            $scope.recompile = recompileChildren;
             $scope.custom1 = function(){
                 $scope.$broadcast('classes:destroy', $scope);
             };
