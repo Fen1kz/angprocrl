@@ -28,23 +28,25 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
         ,get defaultData() {
             return angular.extend({}, defaultData);
         }
+        ,init: function(){
+            dataService.load('data');
+            dataService.update();
+        }
         ,save: function(key, value) {
             dataService.data = value;
             localStorage.setItem(key, angular.toJson(value));
         }
         ,load: function(key) {
             var data = angular.fromJson(localStorage.getItem(key));
-            if (data) {
-                dataService.data = data;
-            } else {
-                dataService.save('data', dataService.data);
+            if (!data) {
+                data = dataService.defaultData;
             }
+            dataService.data = data;
             return data;
         }
-        ,flush: function(key) {
-            localStorage.removeItem(key);
-            dataService.data = dataService.defaultData;
-            dataService.update();
+        ,flush: function() {
+            localStorage.removeItem('data');
+            dataService.init();
         }
         ,update: function() {
             //dataService.data.classes = makeTree(dataService.data.classes, {
@@ -81,7 +83,7 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
             dataService.update();
         }
     };
-    dataService.load('data');
+    dataService.init();
     window.dataService = dataService;
 
     function makeTree(classes, data) {

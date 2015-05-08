@@ -12,17 +12,35 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
             $scope.service = dataService;
 
 
-            var recompile = function() {
-                $e.find('.character-class-children').remove();
+            var recompileChildren = function() {
+                $scope.$broadcast('classes:destroy scope', $scope);
+                //$e.find('.character-class-children').remove();
                 $scope.childClasses = dataService.getClasses($scope.model.id);
                 if ($scope.childClasses.length > 0) {
                     $compile('<div class="character-class-children"><character-class ng-repeat="class in childClasses" model="class"/></div>')($scope, function(cloned, scope){
+                        debugger;
                         $e.append(cloned);
                     });
                 }
             };
-            $scope.$on('classes:update', recompile);
-            recompile();
+            //$scope.$on('classes:update', recompileChildren);
+            recompileChildren();
+
+
+            $scope.$on('classes:destroy scope', function(event, scope){
+                console.log('someone tries to destroy', $scope.model.id,
+                    'and my scope equlity: ', $scope.$id === scope.$id
+                    )
+                if ($scope.$id !== scope.$id) {
+                    $scope.$destroy();
+                }
+            });
+
+            $scope.$on('$destroy', function(){
+                console.log('huh, im destroyed', $scope.model.id)
+                $e.remove();
+                console.log($e);
+            });
 
             $scope.$watch('model.id', function(newValue, oldValue) {
                 _.each(dataService.data.classes, function(e){
@@ -39,11 +57,15 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
             //});
 
             $scope.add = function(){
+                console.log($scope.model.id, "ADD")
                 dataService.addClass($scope.model);
+                recompileChildren();
             };
 
             $scope.remove = function(){
+                console.log("REMOVE")
                 dataService.removeClass($scope.model);
+                $scope.$broadcast('$destroy');
             };
 
             $scope.edit = function($event) {
