@@ -1,5 +1,16 @@
+.character-class-wrapper {
+    border: 1px solid black;
+    padding: 5px;
+    margin: 5px;
+    .clearfix();
+}
+.character-class-children {
+    float: left;
+}
 .character-class {
-    position: absolute;
+    display: inline-block;
+    position: relative;
+    float: left;
     .element {
         display: inline-block;
         padding: .5em;
@@ -19,9 +30,9 @@
         }
     }
     .controls.right {
-        position: absolute;
-        left: 100%;
-        top: 0;
+//        position: absolute;
+//        left: 100%;
+//        top: 0;
     }
 }
 .character-class:hover {

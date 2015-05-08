@@ -7,7 +7,10 @@
             <button ng-click="dataService.flush()">flush</button>
         </div>
         <div class="character-class-container">
-            <character-class on-repeat-events ng-repeat="class in dataService.data.classes" index="$index"/>
+            <character-class
+                on-repeat-events
+                ng-repeat="class in dataService.getClasses(undefined)"
+                model="class"/>
         </div>
     </div>
 </div>

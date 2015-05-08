@@ -1,19 +1,20 @@
-angular.module('AndProcRLData').directive('characterClass', function($rootScope, $document, dataService) {
+angular.module('AndProcRLData').directive('characterClass', function($rootScope, $document, $compile, dataService) {
 	return {
 		restrict: 'E',
 		replace: true,
 		scope: {
-            index: '='
+            model: '='
+            //,index: '='
 		},
 		templateUrl: 'directive/character-class/character-class.html',
 		link: function($scope, $e, attrs, fn) {
-            $scope.model = dataService.data.classes[$scope.index];
+            //$scope.model = dataService.data.classes[$scope.index];
+            //$scope.service = dataService;
+            $scope.childClasses = dataService.getClasses($scope.model.id);
 
-            $scope.$watch('model._gfx', function(newValue, oldValue) {
-                //console.log($scope.model.id, 'MODEL', newValue, oldValue)
-                $e.css('left', $scope.model._gfx.x);
-                $e.css('top', $scope.model._gfx.y);
-            });
+            if ($scope.childClasses.length > 0) {
+                $e.append($compile('<div class="character-class-children"><character-class ng-repeat="class in childClasses" model="class"/></div>')($scope));
+            }
 
             $scope.$watch('model.id', function(newValue, oldValue) {
                 _.each(dataService.data.classes, function(e){
@@ -23,11 +24,11 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                 });
             });
 
-            $scope.$watch('model._gfx', function(newValue, oldValue) {
-                //console.log($scope.model.id, 'MODEL', newValue, oldValue)
-                $e.css('left', $scope.model._gfx.x);
-                $e.css('top', $scope.model._gfx.y);
-            });
+            //$scope.$watch('model._gfx', function(newValue, oldValue) {
+            //    //console.log($scope.model.id, 'MODEL', newValue, oldValue)
+            //    $e.css('left', $scope.model._gfx.x);
+            //    $e.css('top', $scope.model._gfx.y);
+            //});
 
             $scope.add = function(){
                 dataService.addClass($scope.model);

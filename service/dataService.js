@@ -9,7 +9,13 @@ angular.module('AndProcRLData').factory('dataService',function() {
         }, {
             id: 'Bandit',
             parent: 'Adventurer'
-        }, {
+        },{
+            id: 'Rogue',
+            parent: 'Bandit'
+        },{
+            id: 'Ranger',
+            parent: 'Bandit'
+        },{
             id: 'Secret'
         }, {
             id: 'SecretChild',
@@ -41,11 +47,16 @@ angular.module('AndProcRLData').factory('dataService',function() {
             dataService.update();
         }
         ,update: function() {
-            dataService.data.classes = makeTree(dataService.data.classes, {
-                yAddition: 40,
-                xMultiplier: 150
-            }).classes;
+            //dataService.data.classes = makeTree(dataService.data.classes, {
+            //    yAddition: 40,
+            //    xMultiplier: 150
+            //}).classes;
             dataService.save('data', dataService.data);
+        }
+        ,getClasses: function(parent) {
+            var _fn = (parent === void 0) ? _.reject : _.filter;
+            console.log('asked for', parent, 'got', _fn(dataService.data.classes, 'parent', parent));
+            return _fn(dataService.data.classes, 'parent', parent);
         }
         ,addClass: function(model) {
             if (_.some(dataService.data.classes, 'id', 'newClass')) {

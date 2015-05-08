@@ -5,7 +5,7 @@ angular.module('AndProcRLData').controller('HomeCtrl',function($scope, $timeout,
     };
 
     $scope.$on(OnRepeatEvents.LAST, function(event, element, attrs){
-        dataService.update();
+        //dataService.update();
         //$scope.$broadcast('refreshLayout');
     });
 });
