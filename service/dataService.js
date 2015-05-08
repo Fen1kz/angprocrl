@@ -49,7 +49,6 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
         ,update: function() {
             console.log('classes:update')
             $rootScope.$broadcast('classes:update');
-            dataService.save('data', dataService.data);
         }
         ,getClassesIndexes: function(parent) {
             return _.reduce(dataService.data.classes, function(memo, e, id) {
@@ -73,13 +72,13 @@ angular.module('AndProcRLData').factory('dataService',function($rootScope) {
                 parent: model.id
             };
 
-            dataService.update();
+            dataService.save('data', dataService.data);
         }
         ,removeClass: function(model) {
             //_.remove(dataService.data.classes, 'id', model.id);
             delete dataService.data.classes[model.id];
 
-            dataService.update();
+            dataService.save('data', dataService.data);
         }
     };
     dataService.init();

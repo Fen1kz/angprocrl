@@ -34,6 +34,7 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
             };
             recompileChildren();
 
+            var droptarget;
             $e.find('.position').on('mousedown', function(e) {
                 var $characterClass = $(e.currentTarget).parents('.character-class');
                 var $target = $(e.target).clone();
@@ -61,14 +62,18 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                 });
                 $document.on('mouseup.class.position', function(){
                     $document.off('.class.position');
+                    var targetClass = $('.dropzone').attr('data-class');
                     $('.dropzone').removeClass('dropzone');
                     $target.remove();
 
                     //dataService.data.classes
                     //delete dataService.data.classes[$scope.index];
-                    charClassService.changeParent(model, 'Adventurer')
+                    if (targetClass) {
+                        $scope.model.parent = targetClass;
+                    }
+                    //$rootScope('')
                 });
-            })
+            });
 
             $scope.$on('classes:destroy', function(event, scope){
                 if ($scope.$id !== scope.$id) {
