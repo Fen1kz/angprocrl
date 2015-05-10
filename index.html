@@ -34,15 +34,15 @@
   <script src="directive/util/on-repeat-events.js"></script>
   <script src="directive/util/rl-unique.js"></script>
   <script src="service/charClassService.js"></script>
+  <script src="partial/debug-display/debug-display.js"></script>
   <!-- Add New Component JS Above -->
 
-  <div>
-    <div id="content" class="xcontainer">
+  <div class="container-fluid">
       <div class="row">
-        <div ui-view>
-        </div>
+          <div ui-view="left" class="col-md-3"></div>
+          <div ui-view class="col-md-6"></div>
+          <div ui-view="right" class="col-md-3"></div>
       </div>
-    </div>
   </div>
 
 </body>

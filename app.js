@@ -4,10 +4,23 @@ angular.module('AndProcRLData', ['ui.bootstrap','ui.utils','ui.router','ngAnimat
 
 angular.module('AndProcRLData').config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
+        .state('root', {
+            abstract: true,
+            views: {
+                'left': {
+                    templateUrl: "partial/debug-display/debug-display.html"
+                }
+            }
+        })
         .state('home', {
             url: '/home',
-            templateUrl: "partial/home/home.html",
-            controller: 'HomeCtrl'
+            parent: 'root',
+                views: {
+                '@': {
+                    templateUrl: "partial/home/home.html",
+                    controller: 'HomeCtrl'
+                }
+            }
         });
 
 

@@ -1,4 +1,4 @@
-angular.module('AndProcRLData').directive('characterClass', function($rootScope, $document, $compile, dataService) {
+angular.module('AndProcRLData').directive('characterClass', function($rootScope, $document, $compile, charClassService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -8,18 +8,18 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
 		},
 		templateUrl: 'directive/character-class/character-class.html',
 		link: function($scope, $e, attrs, fn) {
-            $scope.model = dataService.data.classes[$scope.index];
+            $scope.model = charClassService.data[$scope.index];
             $scope.model.id = $scope.index;
 
             $scope.$watch('model.id', function(newValue, oldValue) {
-                _.each(dataService.data.classes, function(e){
+                _.each(charClassService.data, function(e){
                     if (e.parent === oldValue) {
                         e.parent = newValue;
                     }
                 });
             });
 
-            $scope.childClassesIndexes = dataService.getClassesIndexes($scope.model.id);
+            $scope.childClassesIndexes = charClassService.getClassesIndexes($scope.model.id);
 
             var compileChildren = function() {
                 if ($scope.childClassesIndexes.length > 0) {
@@ -32,7 +32,7 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
 
             $scope.$on('classes:update', function(event, $id){
                 if ($scope.$id !== $id) {
-                    $scope.childClassesIndexes = dataService.getClassesIndexes($scope.model.id);
+                    $scope.childClassesIndexes = charClassService.getClassesIndexes($scope.model.id);
                     if ($e.find('.character-class-children').length === 0) {
                         compileChildren();
                     }
@@ -80,25 +80,22 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                     $('.dropzone').removeClass('dropzone');
                     $target.remove();
 
-                    //dataService.data.classes
-                    //delete dataService.data.classes[$scope.index];
                     if (targetClass) {
                         $scope.model.parent = targetClass;
                         $scope.$apply();
                         $rootScope.$broadcast('classes:update', $scope.$id);
                         $scope.$apply();
                     }
-                    //$rootScope('')
                 });
             });
 
             $scope.add = function(){
-                dataService.addClass($scope.model);
+                charClassService.addClass($scope.model);
             };
 
             $scope.remove = function(){
                 if (!confirm('rly?')) return;
-                dataService.removeClass($scope.model);
+                charClassService.removeClass($scope.model);
             };
 
             $scope.edit = function($event) {
@@ -125,23 +122,16 @@ angular.module('AndProcRLData').directive('characterClass', function($rootScope,
                             $scope.editing = false;
                             var oldIndex = $scope.index;
                             $scope.index = $scope.editModel.id;
-                            dataService.data.classes[$scope.index] = $scope.editModel;
-                            $scope.model = dataService.data.classes[$scope.index];
+                            charClassService.data[$scope.index] = $scope.editModel;
+                            $scope.model = charClassService.data[$scope.index];
                             delete $scope.editModel;
-                            delete dataService.data.classes[oldIndex];
+                            delete charClassService.data[oldIndex];
                         });
                     }
                 };
 
                 $document.on('click', listener);
                 $document.on('keyup', listener);
-            }
-
-            /*
-            * DEPRECATED
-            * */
-            $scope.custom1 = function(){
-                $scope.$broadcast('classes:destroy', $scope);
             };
 		}
 	};
