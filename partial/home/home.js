@@ -26,7 +26,7 @@ angular.module('AndProcRLData')
             $scope.$watch('attributes['+index+'].value', function() {
                 _.each($scope.traits, function(trait) {
                     try {
-                    trait.value = trait.fn ? trait.fn() : 0;
+                        trait.value = trait.fn ? trait.fn() : 0;
                     } catch (e) {
                         console.log('wrong!!!!!!!!!');
                     }
@@ -47,23 +47,44 @@ angular.module('AndProcRLData')
         }
 
         $scope.refreshLinks = function() {
-            attributeService.refreshLinks();
+            $scope.links = attributeService.refreshLinks();
         };
         $scope.refreshLinks();
 
+        $scope.$watch('links', function(newValue) {
+            _.each($scope.links, function(link){
+                var line = linedraw(
+                    $scope.attributes[link.from.index].gfx.x+200,
+                    $scope.attributes[link.from.index].gfx.y,
+                    $scope.traits[link.to.index].gfx.x,
+                    $scope.traits[link.to.index].gfx.y
+                );
+                link.style = {
+                    width: 1,
+                    height: line.length,
+                    'background-color': 'black',
+                    position: 'absolute',
+                    left: line.ax + 'px',
+                    top: line.ay + 'px',
+                    transform: 'rotate('+line.calc+'deg)',
+                    'transform-origin': '0% 0%'
+                };
+                console.log(link.style);
+            });
+        });
 
-        //$scope.attributes[0].lnks.push({target: 'HP'});
-
-        //_.each($scope.attributes, function(attr){
-        //    _.each(attr.lnks, function(link){
-        //        var target = _.find($scope.traits, 'id', link.target);
-        //        link.x1 = attr.gfx.x+40;
-        //        link.x2 = target.gfx.x-10;
-        //        link.y1 = attr.gfx.y-5;
-        //        link.y2 = target.gfx.y-5;
-        //        $scope.links.push(link);
-        //    });
-        //});
+        function linedraw(ax, ay, bx, by) {
+            //if (ay > by) {
+                var dx = ax - bx;
+                var dy = ay - by;
+            //}
+            return {
+                ax: ax,
+                ay: ay,
+                calc: Math.atan2(dy, dx) * 180 / Math.PI + 90,
+                length: Math.sqrt(dx * dx + dy * dy)
+                };
+        }
 
         $scope.flush = function () {
             charClassService.flush();

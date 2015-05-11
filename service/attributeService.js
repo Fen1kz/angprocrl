@@ -4,29 +4,14 @@ angular.module('AndProcRLData').factory('attributeService',function(dataService)
         refreshLinks: function() {
             var links = [];
             _.each(dataService.data.traits, function(trait, traitIndex) {
-                if (trait.formula) {
-                    var formula = trait.formula;
-                    //_.each(dataService.data.attributes, function(attr, attrIndex) {
-                    //    formula.replace(attr.id, ' +dataService.data.attributes['+attrIndex+'] ');
-                    //    definitions += '\n var ' + attr.id + ' = +(_.find(attrs, "id", "' + attr.id + ').value) || 0;';
-                    //});
-                    //trait.fn = eval('(function(attrs, formula){'
-                    //    //+'\ndebugger;'
-                    //+'\nreturn eval(formula);})');
-                    _.each(dataService.data.attributes, function(attr, attrIndex) {
-                        if (trait.formula.match(new RegExp(attr.id))) {
-                            console.log(trait.formula, 'includes', attr.id);
-                            links.push({
-                                from: {id: attr.id, index: attrIndex},
-                                to: {id: trait.id, index: traitIndex}
-                            });
-                        }
-                    });
-                    //console.log(trait.fn);
-                    //console.log(trait.fn(dataService.data.attributes));
-                    //var matchedAttr = trait.formula
-                    //trait.links =
-                }
+                _.each(dataService.data.attributes, function(attr, attrIndex) {
+                    if (trait.formula && trait.formula.match(new RegExp(attr.id))) {
+                        links.push({
+                            from: {id: attr.id, index: attrIndex},
+                            to: {id: trait.id, index: traitIndex}
+                        });
+                    }
+                });
             });
             return links;
         }
