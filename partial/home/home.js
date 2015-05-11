@@ -8,14 +8,17 @@ angular.module('AndProcRLData')
 
         _.each($scope.attributes, function(e, index){
             e.gfx.x = 100;
-            e.gfx.y = 20 * (index + 1);
+            e.gfx.y = 30 * (index + 1);
         });
         _.each($scope.traits, function(e, index){
-            e.gfx.x = 200;
+            e.gfx.x = 400;
             e.gfx.y = 30 * (index + 1);
         });
 
-        attributeService.refreshLinks();
+        $scope.refreshLinks = function() {
+            attributeService.refreshLinks();
+        };
+        $scope.refreshLinks();
 
         //$scope.attributes[0].lnks.push({target: 'HP'});
 
