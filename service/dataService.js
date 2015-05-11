@@ -3,14 +3,45 @@ angular.module('AndProcRLData').service('dataService',function($rootScope) {
         name: 'dataService'
         , data: {}
         ,get defaultData() {
-            return _.mapValues({
-            }, function(e, id){
-                e.id = id;
+            var defaultData = {};
+            defaultData.attributes = _.map([
+                {id:'STR'},
+                {id:'AGI'},
+                {id:'VIT'},
+                {id:'CON'},
+                {id:'LUK'},
+                {id:'SPD'},
+                {id:'INT'},
+                {id:'WIZ'}
+            ], function(e, id){
+                if (!e.gfx) e.gfx = {};
                 return e;
             });
+            defaultData.traits = _.map([
+                {id:'HP', formula: 'STR + VIT * 2'},
+                {id:'ATK'},
+                {id:'BLOCK'},
+                {id:'DEF'},
+                {id:'MVSPD'},
+                {id:'HIT'},
+                {id:'ATSPD'},
+                {id:'CRIT'},
+                {id:'EVA'},
+                {id:'SPELL'},
+                {id:'SIGHT'},
+                {id:'MP'},
+                {id:'SOCIO'},
+                {id:'CRAFT'},
+                {id:'SMTH1'},
+                {id:'SMTH2'}
+            ], function(e, id){
+                if (!e.gfx) e.gfx = {};
+                return e;
+            });
+            return defaultData;
         }
         ,init: function(){
-            dataService.load('data', dataService.defaultData);
+            dataService.data = dataService.load('data', dataService.defaultData);
             dataService.update();
         }
         ,load: function(key, defaultData) {

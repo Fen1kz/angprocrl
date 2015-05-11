@@ -8,5 +8,33 @@
                 ng-repeat="index in childClassesIndexes"
                 index="index"/>
         </div>
+        <div class="row clearfix">
+            <svg width="100%" height="350px">
+                <text ng-repeat="attr in attributes"
+                      ng-attr-x={{attr.gfx.x}} ng-attr-y={{attr.gfx.y}}
+                    >{{attr.id}}</text>
+                <text ng-repeat="trait in traits"
+                      ng-attr-x={{trait.gfx.x}} ng-attr-y={{trait.gfx.y}}
+                    >{{trait.id}}</text>
+                <foreignObject ng-repeat="trait in traits"
+                      ng-init="
+                        x_edit = trait.gfx.x + 70;
+                        y_edit = trait.gfx.y - 14;"
+                      ng-attr-x={{x_edit}} ng-attr-y={{y_edit}}
+                      width="200"
+                      height="2em"
+                    >
+                    <input ng-model="trait.formula" style="width:100%">
+                </foreignObject>
+                <line ng-repeat="link in links"
+                      stroke="black"
+                      stroke-width="2"
+                      ng-attr-x1="{{link.x1}}"
+                      ng-attr-x2="{{link.x2}}"
+                      ng-attr-y1="{{link.y1}}"
+                      ng-attr-y2="{{link.y2}}"
+                    ></line>
+            </svg>
+        </div>
     </div>
 </div>
