@@ -5,13 +5,14 @@ angular.module('AndProcRLData').factory('attributeService',function(dataService)
             var links = [];
             _.each(dataService.data.traits, function(trait, traitIndex) {
                 if (trait.formula) {
-                    var definitions = "";
-                    _.each(dataService.data.attributes, function(attr) {
-                        definitions += '\n var ' + attr.id + ' = +(_.find(attrs, "id", "' + attr.id + '").value) || 0;';
-                    });
-                    trait.fn = eval('(function(attrs, formula){\n' + definitions
-                        +'\ndebugger;'
-                    +'\nreturn eval(formula);})');
+                    var formula = trait.formula;
+                    //_.each(dataService.data.attributes, function(attr, attrIndex) {
+                    //    formula.replace(attr.id, ' +dataService.data.attributes['+attrIndex+'] ');
+                    //    definitions += '\n var ' + attr.id + ' = +(_.find(attrs, "id", "' + attr.id + ').value) || 0;';
+                    //});
+                    //trait.fn = eval('(function(attrs, formula){'
+                    //    //+'\ndebugger;'
+                    //+'\nreturn eval(formula);})');
                     _.each(dataService.data.attributes, function(attr, attrIndex) {
                         if (trait.formula.match(new RegExp(attr.id))) {
                             console.log(trait.formula, 'includes', attr.id);
