@@ -9,16 +9,16 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
 
         , getClassesIndexes: function (parent) {
             console.log('getClassesIndexes called by ', parent);
-            var a = _.reduce(service.data, function (memo, e, id) {
+            var a = _.reduce(service.data, function (memo, e, index) {
                 if (e.parent == parent) {
-                    memo.push(id);
+                    memo.push(index);
                 }
                 return memo;
             }, []);
             return a;
         }
         , addClass: function (model) {
-            if (_.some(_.keys(service.data), 'newClass')) {
+            if (_.some(service.data, 'id', 'newClass')) {
                 alert('dupe!');
                 return;
             }

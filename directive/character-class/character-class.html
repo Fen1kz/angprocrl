@@ -1,5 +1,4 @@
-
-<div class="character-class" ng-class="{'sole' : $parent.childClassesIndexes.length == 1}" data-character-class="{{model.id}}">
+<div class="character-class" ng-class="{'sole' : siblings == 1}" data-character-class="{{model.id}}">
     <div class="element" ng-click="edit($event)">
         <span class="name">{{model.id}}</span>
     </div>

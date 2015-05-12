@@ -2,7 +2,7 @@
     <h3 class="modal-title">Editing class {{model.id}}</h3>
 </div>
 <div class="modal-body">
-    <form class="col-md-5 form-horizontal">
+    <form class="form-horizontal">
         <div class="form-group">
             <label class="col-md-3 control-label" for="model.id">ID</label>
             <div class="col-md-9">
@@ -12,6 +12,22 @@
                     >
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="model.parent">Parent</label>
+            <div class="col-md-9">
+                <div class="row" ng-init="editModel.parent = model.parent">
+                    <input ng-model="editModel.parent" id="model.parent" name="model.parent"
+                           type="text" placeholder="Parent"
+                           class="col-md-6 form-control input-md"
+                        >
+                    <select ng-model='editModel.parent'
+                            ng-options="class.id as class.id for class in classes track by class.id"
+                            class="col-md-6 form-control input-md"></select>
+                </div>
+            </div>
+        </div>
+        <pre>{{editModel | json}}</pre>
+        <pre>{{classes | json}}</pre>
     </form>
 </div>
 <div class="modal-footer">
