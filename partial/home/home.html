@@ -1,40 +1,57 @@
 <div class="row clearfix">
-    <div class="col-md-12">
-        <div>
-            <button ng-click="flush()">flush</button>
-        </div>
-        <div class="character-class-container">
-            <character-class
-                ng-repeat="index in childClassesIndexes"
-                index="index"/>
-        </div>
-        <div class="row clearfix">
-            <button ng-click="refreshLinks()">refreshLinks</button>
-            <div style="position: relative">
-                <div
-                    ng-repeat="attr in attributes"
-                    ng-style="{
-                        left: attr.gfx.x,
-                        top: attr.gfx.y,
-                        position: 'absolute'
-                    }">
-                    {{attr.id}}
-                    <input ng-model="attr.value">
+    <div class="col-md-12" ng-init="tabs.selected = 'Hero'">
+        <ul class="nav nav-tabs nav-tabs-justified">
+            <li ng-repeat="selectedTab in ['Classes','Attributes','Hero']"
+                ng-class="{'active' : tabs.selected == selectedTab}">
+                <a ng-click="tabs.selected = selectedTab">
+                    {{selectedTab}}
+                </a>
+            </li>
+        </ul>
+        <div ng-switch="tabs.selected">
+            <div ng-switch-when="Classes">
+                <div class="character-class-container">
+                    <button ng-click="flush()">flush</button>
+                    <character-class
+                        ng-repeat="index in childClassesIndexes"
+                        index="index"/>
                 </div>
-                <div
-                    ng-repeat="trait in traits"
-                    ng-style="{
-                        left: trait.gfx.x,
-                        top: trait.gfx.y,
-                        position: 'absolute'
-                    }">
-                    <span>{{trait.id}}</span>
-                    <input ng-model="trait.formula">
-                    <span>{{trait.value}}</span>
+            </div>
+            <div ng-switch-when="Attributes">
+                <attributes-traits/>
+            </div>
+            <div ng-switch-when="Hero">
+                <div class="row clearfix">
+                    <form class="col-md-5 form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="hero.level">Level</label>
+                            <div class="col-md-9">
+                                <input ng-model="hero.level" id="hero.level" name="hero.level"
+                                       type="text" placeholder="Level"
+                                       class="form-control input-md"
+                                    >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="hero.class">Class</label>
+                            <div class="col-md-9">
+                                <select ng-model="hero.class" id="hero.class" name="hero.class"
+                                        class="form-control"
+                                    ng-options="className for (className, class) in classes"
+                                    >
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-md-7">
+                        <h3>Attributes</h3>
+                        <div ng-repeat="trait in traits">{{trait.id}}: {{trait.value}}</div>
+                    </div>
                 </div>
-                <div ng-repeat="link in links"
-                     ng-style="link.style"
-                    ></div>
+
+                <div>
+                    <pre>{{hero | json}}</pre>
+                </div>
             </div>
         </div>
     </div>

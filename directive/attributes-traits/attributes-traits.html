@@ -1,0 +1,32 @@
+<div class="attributes-traits">
+    <button ng-click="refreshLinks()">refreshLinks</button>
+    <div class="attributes-traits-container">
+        <div class="attr"
+            ng-repeat="attr in attributes"
+            on-repeat-events
+            data-attr="{{attr.id}}"
+            ng-style="{
+                        left: attr.gfx.x,
+                        top: attr.gfx.y
+                    }">
+            <span class="id">{{attr.id}}</span>
+            <input class="value" ng-model="attr.value">
+        </div>
+        <div class="trait"
+            ng-repeat="trait in traits"
+            data-trait="{{trait.id}}"
+            ng-style="{
+                        left: trait.gfx.x,
+                        top: trait.gfx.y,
+                        position: 'absolute'
+                    }">
+            <span class="id">{{trait.id}}</span>
+            <input class="formula" ng-model="trait.formula">
+            <span class="value">{{trait.value}}</span>
+        </div>
+        <div class="link"
+            ng-repeat="link in links"
+            ng-style="link.style"
+            ></div>
+    </div>
+</div>
