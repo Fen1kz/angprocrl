@@ -1,1 +1,8 @@
-httpcodepen.ioP233penKzbsi
+http://codepen.io/P233/pen/Kzbsi
+
+http://www.html5rocks.com/en/tutorials/dnd/basics/
+
+https://github.com/joyent/node/wiki/Node-Hosting
+http://cloudno.de/
+https://openshift.redhat.com
+https://scalingo.com/

@@ -19,6 +19,7 @@ angular.module('AndProcRLData').service('dataService', function ($rootScope, sto
         , update: function () {
             console.log('data:update');
             $rootScope.$broadcast('data:update');
+            $rootScope.$broadcast('classes:update');
         }
     };
     dataService.init();

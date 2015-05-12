@@ -12,8 +12,8 @@
 <!--<script src="http://localhost:35729/livereload.js" data-concat="false"></script>-->
 
 <!-- JS from Bower Components -->
-<script src="bower_components/less.js/dist/less-1.6.2.js" data-concat="false"></script>
-<script src="bower_components/jquery/jquery.js"></script>
+<script src="bower_components/less.js/dist/less.min.js" data-concat="false"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="bower_components/lodash/lodash.js"></script>
 <script src="bower_components/moment/moment.js"></script>
@@ -52,9 +52,9 @@
                     <a ui-sref="{{menu_item.link}}"
                         >{{menu_item.name}}</a>
                 </li>
-                <li><a ng-click="dataService.save()">Save</a></li>
-                <li><a ng-click="dataService.load()">Load</a></li>
-                <li><a ng-click="dataService.flush()">Flush</a></li>
+                <li><a ng-click="save($event)">Save</a></li>
+                <li><a ng-click="load($event)">Load</a></li>
+                <li><a ng-click="flush($event)">Flush</a></li>
             </ul>
             <div ui-view="content"></div>
         </div>

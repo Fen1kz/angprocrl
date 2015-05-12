@@ -85,7 +85,12 @@ angular.module('AndProcRLData')
         link: 'heroes',
         name: 'Heroes'
     }];
-    $scope.dataService = dataService;
+        _.each(['save','load','flush'], function(action) {
+            $scope[action] = function($event){
+                dataService[action]();
+                console.log(action, 'done!');
+            }
+        });
 });
 
 

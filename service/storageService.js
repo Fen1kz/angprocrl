@@ -4,6 +4,7 @@ angular.module('AndProcRLData').factory('storageService',function() {
             var data = {};
             data.classes = _.mapValues({
                 'Adventurer': {},
+                //'Shaman':{},
                 'Fighter': {parent: 'Adventurer'},
                   'Knight': {parent: 'Fighter'},
                     'Baron': {parent: 'Knight'},
