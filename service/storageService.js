@@ -3,21 +3,48 @@ angular.module('AndProcRLData').factory('storageService',function() {
         get data() {
             var data = {};
             data.classes = _.mapValues({
-                'Adventurer': {
-                    req: null
-                },
-                'Fighter': {
-                    parent: 'Adventurer'
-                },
-                'Bandit': {
-                    parent: 'Adventurer'
-                },
-                'Rogue': {
-                    parent: 'Bandit'
-                },
-                'Ranger': {
-                    parent: 'Bandit'
-                }
+                'Adventurer': {},
+                'Fighter': {parent: 'Adventurer'},
+                  'Knight': {parent: 'Fighter'},
+                    'Baron': {parent: 'Knight'},
+                      'Lord': {parent: 'Baron'},
+                    'Crusader': {parent: 'Knight'},
+                      'Inquisitor': {parent: 'Crusader'},
+                      'Paladin': {parent: 'Crusader'},
+                    'Death Knight': {parent: 'Knight'},
+                      'Death Lord': {parent: 'Death Knight'},
+                  'Warrior': {parent: 'Fighter'},
+                    'Barbarian': {parent: 'Warrior'},
+                      'Berserker': {parent: 'Barbarian'},
+                    'Warlord': {parent: 'Warrior'},
+                      'Chieftain': {parent: 'Warlord'},
+                'Bandit': {parent: 'Adventurer'},
+                  'Rogue': {parent: 'Bandit'},
+                    'Ninja': {parent: 'Rogue'},
+                      'Shadow': {parent: 'Ninja'},
+                    'Killer': {parent: 'Rogue'},
+                      'Assassin': {parent: 'Killer'},
+                'Ranger': {parent: 'Bandit'},
+                  'Hunter': {parent: 'Ranger'},
+                    'Predator': {parent: 'Hunter'},
+                    'Druid': {parent: 'Hunter'},
+                  'Marksman': {parent: 'Ranger'},
+                    'Sniper': {parent: 'Marksman'},
+                    'Artillerist': {parent: 'Marksman'},
+                'Wizard': {parent: 'Adventurer'},
+                  'Sorcerer': {parent: 'Wizard'},
+                    'Mage': {parent: 'Sorcerer'},
+                      'Archmage': {parent: 'Mage'},
+                    'Necromancer': {parent: 'Sorcerer'},
+                      'Lich': {parent: 'Necromancer'},
+                    'Witch': {parent: 'Sorcerer'},
+                      'Warlock': {parent: 'Witch'},
+                  'Acolyte': {parent: 'Wizard'},
+                    'Monk': {parent: 'Acolyte'},
+                      'Fanatic': {parent: 'Monk'},
+                      'Exalted': {parent: 'Monk'},
+                    'Priest': {parent: 'Acolyte'},
+                      'Bishop': {parent: 'Priest'}
             }, function (e, id) {
                 e.id = id;
                 return e;
