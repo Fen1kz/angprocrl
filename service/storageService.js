@@ -51,35 +51,35 @@ angular.module('AndProcRLData').factory('storageService',function() {
                 return e;
             });
             data.attributes = _.map([
-                {id: 'STR'},
-                {id: 'AGI'},
-                {id: 'VIT'},
-                {id: 'CON'},
-                {id: 'LUK'},
-                {id: 'SPD'},
-                {id: 'INT'},
-                {id: 'WIZ'}
+                {id: 'STR', color:'#F00', value:1},
+                {id: 'AGI', color:'#0F0', value:1},
+                {id: 'VIT', color:'#0FF', value:1},
+                {id: 'CON', color:'#080', value:1},
+                {id: 'LUK', color:'#A0A', value:1},
+                {id: 'SPD', color:'#000', value:1},
+                {id: 'INT', color:'#00F', value:1},
+                {id: 'WIZ', color:'#F90', value:1}
             ], function (e, id) {
                 if (!e.gfx) e.gfx = {};
                 return e;
             });
             data.traits = _.map([
-                {id: 'HP', formula: 'STR + VIT * 2'},
-                {id: 'ATK'},
-                {id: 'BLOCK'},
-                {id: 'DEF'},
-                {id: 'MVSPD'},
-                {id: 'HIT'},
-                {id: 'ATSPD'},
-                {id: 'CRIT'},
-                {id: 'EVA'},
-                {id: 'SPELL'},
-                {id: 'SIGHT'},
-                {id: 'MP'},
-                {id: 'SOCIO'},
-                {id: 'CRAFT'},
-                {id: 'SMTH1'},
-                {id: 'SMTH2'}
+                {id: 'HP',    formula: 'VIT * 4 + STR * 2'},
+                {id: 'MP',    formula: 'WIZ * 4 + CON * 2'},
+                {id: 'ATK',   formula: 'STR + AGI'},
+                {id: 'DEF',   formula: 'VIT + CON'},
+                {id: 'BLOCK', formula: '(STR + CON) / 2'},
+                {id: 'HIT',   formula: '(AGI + LUK) / 2'},
+                {id: 'EVA',   formula: '(LUK + SPD) / 2'},
+                {id: 'CRIT',  formula: '(LUK + INT) / 2'},
+                {id: 'SPELL', formula: '(INT + WIZ) / 2'},
+                {id: 'RES',   formula: 'VIT + AGI'},
+                {id: 'MVSPD', formula: '((SPD - 1) * .66 + (AGI - 1) * .34) / 20'},
+                {id: 'ATSPD', formula: '((SPD - 1) * .66 + (VIT - 1) * .34) / 10'},
+                {id: 'SIGHT', formula: 'INT + WIZ'},
+                {id: 'SOCIO', formula: '(WIZ + LUK) / 2'},
+                {id: 'CRAFT', formula: '(INT + CON) / 2'},
+                {id: 'SMTH1', formula: '(STR + SPD) / 2'}
             ], function (e, id) {
                 if (!e.gfx) e.gfx = {};
                 return e;

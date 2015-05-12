@@ -62,7 +62,7 @@ angular.module('AndProcRLData').directive('attributesTraits', function($timeout,
                         link.style = {
                             width: 1,
                             height: length,
-                            'background-color': 'black',
+                            'background-color': attr.color,
                             position: 'absolute',
                             left: ax + 'px',
                             top: ay + 'px',
