@@ -1,0 +1,8 @@
+<div class="col-md-12" ng-controller="ClassesCtrl">
+    <div class="character-class-container">
+        <button ng-click="flush()">flush</button>
+        <character-class
+            ng-repeat="index in childClassesIndexes"
+            index="index"/>
+    </div>
+</div>

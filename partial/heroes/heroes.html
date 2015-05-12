@@ -1,0 +1,33 @@
+<div class="col-md-12" ng-controller="HeroesCtrl">
+    <div class="row clearfix">
+        <form class="col-md-5 form-horizontal">
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="hero.level">Level</label>
+                <div class="col-md-9">
+                    <input ng-model="hero.level" id="hero.level" name="hero.level"
+                           type="text" placeholder="Level"
+                           class="form-control input-md"
+                        >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="hero.class">Class</label>
+                <div class="col-md-9">
+                    <select ng-model="hero.class" id="hero.class" name="hero.class"
+                            class="form-control"
+                            ng-options="className for (className, class) in classes"
+                        >
+                    </select>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-7">
+            <h3>Attributes</h3>
+            <div ng-repeat="trait in traits">{{trait.id}}: {{trait.value}}</div>
+        </div>
+    </div>
+
+    <div>
+        <pre>{{hero | json}}</pre>
+    </div>
+</div>

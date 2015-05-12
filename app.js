@@ -7,7 +7,7 @@ angular.module('AndProcRLData').config(function($stateProvider, $urlRouterProvid
         .state('root', {
             abstract: true,
             views: {
-                'left': {
+                'left@': {
                     templateUrl: "partial/debug-display/debug-display.html"
                 }
             }
@@ -15,10 +15,36 @@ angular.module('AndProcRLData').config(function($stateProvider, $urlRouterProvid
         .state('home', {
             url: '/home',
             parent: 'root',
-                views: {
-                '@': {
-                    templateUrl: "partial/home/home.html",
-                    controller: 'HomeCtrl'
+            views: {
+                'content@': {
+                    templateUrl: "partial/home/home.html"
+                }
+            }
+        })
+        .state('classes', {
+            url: '/classes',
+            parent: 'root',
+            views: {
+                'content@': {
+                    templateUrl: "partial/classes/classes.html"
+                }
+            }
+        })
+        .state('attrs', {
+            url: '/attrs',
+            parent: 'root',
+            views: {
+                'content@': {
+                    templateUrl: "partial/attrs/attrs.html"
+                }
+            }
+        })
+        .state('heroes', {
+            url: '/heroes',
+            parent: 'root',
+            views: {
+                'content@': {
+                    templateUrl: "partial/heroes/heroes.html"
                 }
             }
         });
@@ -43,3 +69,41 @@ angular.module('AndProcRLData').run(function($rootScope) {
     };
 
 });
+
+angular.module('AndProcRLData')
+.controller('AppCtrl', function($scope){
+    $scope.menu = [{
+        link: 'home',
+        name: 'Home'
+    },{
+        link: 'classes',
+        name: 'Classes'
+    },{
+        link: 'attrs',
+        name: 'Attributes'
+    },{
+        link: 'heroes',
+        name: 'Heroes'
+    }];
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

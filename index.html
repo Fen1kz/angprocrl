@@ -37,12 +37,23 @@
   <script src="partial/debug-display/debug-display.js"></script>
   <script src="service/attributeService.js"></script>
   <script src="directive/attributes-traits/attributes-traits.js"></script>
+  <script src="partial/classes/classes.js"></script>
+  <script src="partial/attrs/attrs.js"></script>
+  <script src="partial/heroes/heroes.js"></script>
   <!-- Add New Component JS Above -->
 
-  <div class="container-fluid">
+  <div class="container-fluid" ng-controller="AppCtrl">
       <div class="row">
           <div ui-view="left" class="col-md-3"></div>
-          <div ui-view class="col-md-6"></div>
+          <div class="col-md-6">
+              <ul class="nav nav-tabs nav-tabs-justified">
+                  <li ng-repeat="menu_item in menu" ui-sref-active="active">
+                      <a ui-sref="{{menu_item.link}}"
+                          >{{menu_item.name}}</a>
+                  </li>
+              </ul>
+              <div ui-view="content"></div>
+          </div>
           <div ui-view="right" class="col-md-3"></div>
       </div>
   </div>
