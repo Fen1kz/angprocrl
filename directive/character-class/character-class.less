@@ -45,6 +45,9 @@
 .character-class {
     position: relative;
     min-height: @entry-min-height;
+    cursor: pointer;
+    .name {
+    }
     &:before {
         content: "";
         height: 100%;
@@ -114,5 +117,13 @@
     left: 0;
     top: 50%;
     margin-top: -(@label-height / 2);
+
+    &:hover {
+        background: #ddd;
+        +.character-class-children .element {
+            background: #eee;
+        }
+    }
+
 }
 

@@ -1,22 +1,6 @@
 
 <div class="character-class" ng-class="{'sole' : $parent.childClassesIndexes.length == 1}" data-character-class="{{model.id}}">
-    <!--<div class="controls" ng-show="model.parent">-->
-        <!--<button class="position"><</button>-->
-    <!--</div>-->
     <div class="element">
-        <span ng-show="!editing" ng-click="edit($event)">{{model.id}}</span>
-        <input
-            ng-show="editing"
-            ng-model="editModel.id"
-            data-rl-unique="{
-                index: index,
-            }"
-            required
-            />
+        <span class="name" ng-click="edit($event)">{{model.id}}</span>
     </div>
-    <!--<div><pre>{{childClassesIndexes | json}}</pre></div>-->
-    <!--<div class="controls right">-->
-        <!--<button class="control" ng-click="add()">+</button>-->
-        <!--<button class="control" ng-click="remove()">-</button>-->
-    <!--</div>-->
 </div>

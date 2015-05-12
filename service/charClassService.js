@@ -9,12 +9,13 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
 
         , getClassesIndexes: function (parent) {
             console.log('getClassesIndexes called by ', parent);
-            return _.reduce(service.data, function (memo, e, id) {
+            var a = _.reduce(service.data, function (memo, e, id) {
                 if (e.parent == parent) {
                     memo.push(id);
                 }
                 return memo;
             }, []);
+            return a;
         }
         , addClass: function (model) {
             if (_.some(_.keys(service.data), 'newClass')) {

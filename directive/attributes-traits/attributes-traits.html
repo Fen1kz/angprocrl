@@ -17,12 +17,12 @@
             data-trait="{{trait.id}}"
             ng-style="{
                         left: trait.gfx.x,
-                        top: trait.gfx.y,
-                        position: 'absolute'
+                        top: trait.gfx.y
                     }">
             <span class="id">{{trait.id}}</span>
             <input class="formula" ng-model="trait.formula">
-            <span class="value">{{trait.value}}</span>
+            <input class="base" placeholder="base" ng-model="trait.base">
+            <trait trait="trait" attributes="attributes"/>
         </div>
         <div class="link"
             ng-repeat="link in links"

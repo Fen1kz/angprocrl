@@ -20,13 +20,14 @@ angular.module('AndProcRLData').directive('attributesTraits', function($timeout,
                 trait.gfx.x = traitsx;
                 trait.gfx.y = stepy * index;
                 $scope.$watch('traits['+index+'].formula', function(formula) {
+                    console.log('formula watch');
                     if (formula) {
                         _.each($scope.attributes, function(attr, attrIndex) {
-                            formula = formula.replace(attr.id, '(+dataService.data.attributes['+attrIndex+'].value || 0)');
+                            formula = formula.replace(attr.id, '(+attributes['+attrIndex+'].value || 0)');
                         });
                         try {
-                            trait.fn = eval('(function(){return ' + formula + ';})');
-                            trait.value = trait.fn();
+                            trait.fn = eval('(function(attributes){return (+this.base || 0) +' + formula + ';})');
+                            trait.value = trait.fn($scope.attributes);
                         } catch (e) {
                             //console.log('Wrong formula');
                         }
@@ -38,15 +39,6 @@ angular.module('AndProcRLData').directive('attributesTraits', function($timeout,
             _.each($scope.attributes, function(e, index){
                 e.gfx.x = attrsx;
                 e.gfx.y = stepy * index;
-                $scope.$watch('attributes['+index+'].value', function() {
-                    _.each($scope.traits, function(trait) {
-                        try {
-                            trait.value = trait.fn ? trait.fn() : 0;
-                        } catch (e) {
-                            //console.log('Wrong formula (attr.value changed)');
-                        }
-                    });
-                });
             });
 
             //$scope.$on(OnRepeatEvents.LAST, function(event, element, attrs){
