@@ -1,69 +1,27 @@
-angular.module('AndProcRLData').service('dataService',function($rootScope) {
-	var dataService = {
+angular.module('AndProcRLData').service('dataService', function ($rootScope, storageService) {
+    var dataService = {
         name: 'dataService'
         , data: {}
-        ,get defaultData() {
-            var defaultData = {};
-            defaultData.attributes = _.map([
-                {id:'STR'},
-                {id:'AGI'},
-                {id:'VIT'},
-                {id:'CON'},
-                {id:'LUK'},
-                {id:'SPD'},
-                {id:'INT'},
-                {id:'WIZ'}
-            ], function(e, id){
-                if (!e.gfx) e.gfx = {};
-                return e;
-            });
-            defaultData.traits = _.map([
-                {id:'HP', formula: 'STR + VIT * 2'},
-                {id:'ATK'},
-                {id:'BLOCK'},
-                {id:'DEF'},
-                {id:'MVSPD'},
-                {id:'HIT'},
-                {id:'ATSPD'},
-                {id:'CRIT'},
-                {id:'EVA'},
-                {id:'SPELL'},
-                {id:'SIGHT'},
-                {id:'MP'},
-                {id:'SOCIO'},
-                {id:'CRAFT'},
-                {id:'SMTH1'},
-                {id:'SMTH2'}
-            ], function(e, id){
-                if (!e.gfx) e.gfx = {};
-                return e;
-            });
-            return defaultData;
-        }
-        ,init: function(){
-            dataService.data = dataService.load('data', dataService.defaultData);
+        , init: function () {
+            dataService.load();
             dataService.update();
         }
-        ,load: function(key, defaultData) {
-            var data = angular.fromJson(localStorage.getItem(key));
-            if (!data) {
-                data = defaultData;
-            }
-            return data;
+        , load: function () {
+            dataService.data = storageService.load('data', angular.extend({}, storageService.data));
         }
-        ,save: function(key, value) {
-            localStorage.setItem(key, angular.toJson(value));
+        , save: function () {
+            storageService.save('data', angular.toJson(dataService.data));
         }
-        ,flush: function(key) {
-            localStorage.removeItem(key);
+        , flush: function () {
+            storageService.remove('data');
             dataService.init();
         }
         , update: function () {
-            console.log('data:update')
+            console.log('data:update');
             $rootScope.$broadcast('data:update');
         }
     };
     dataService.init();
     window.dataService = dataService;
-	return dataService;
+    return dataService;
 });

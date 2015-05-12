@@ -71,7 +71,7 @@ angular.module('AndProcRLData').run(function($rootScope) {
 });
 
 angular.module('AndProcRLData')
-.controller('AppCtrl', function($scope){
+.controller('AppCtrl', function($scope, dataService){
     $scope.menu = [{
         link: 'home',
         name: 'Home'
@@ -85,6 +85,7 @@ angular.module('AndProcRLData')
         link: 'heroes',
         name: 'Heroes'
     }];
+    $scope.dataService = dataService;
 });
 
 

@@ -1,43 +1,7 @@
 angular.module('AndProcRLData').service('charClassService', function ($rootScope, dataService) {
     var service = {
         name: 'charClassService'
-        , data: {}
-        , get defaultData() {
-            return _.mapValues({
-                'Adventurer': {
-                    req: null
-                },
-                'Fighter': {
-                    parent: 'Adventurer'
-                },
-                'Bandit': {
-                    parent: 'Adventurer'
-                },
-                'Rogue': {
-                    parent: 'Bandit'
-                },
-                'Ranger': {
-                    parent: 'Bandit'
-                }
-            }, function (e, id) {
-                e.id = id;
-                return e;
-            });
-        }
-        , init: function () {
-            service.load();
-            service.update();
-        }
-        , load: function () {
-            service.data = dataService.load('classes', service.defaultData);
-        }
-        , save: function () {
-            dataService.save('classes', service.data);
-        }
-        , flush: function () {
-            dataService.flush('classes');
-            service.init();
-        }
+        , data: dataService.data.classes
         , update: function () {
             console.log('classes:update')
             $rootScope.$broadcast('classes:update');
@@ -69,7 +33,6 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
             service.update();
         }
     };
-    service.init();
     window.charClassService = service;
     return service;
 });

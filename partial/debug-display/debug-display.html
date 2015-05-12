@@ -1,12 +1,3 @@
 <div class="row" ng-controller="DebugDisplayCtrl">
-    <ul class="nav nav-tabs nav-tabs-justified">
-        <li ng-repeat="(serviceName, service) in services"
-            ng-class="{'active' : selectedService.name === serviceName}">
-            <a ng-click="selectService(service)">
-                {{serviceName}}{{selectedService.name === serviceName}}
-            </a>
-        </li>
-    </ul>
-    <pre>{{selectedService.name | json}}</pre>
-    <pre>{{selectedService.data | json}}</pre>
+    <pre>{{data | json}}</pre>
 </div>
