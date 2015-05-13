@@ -2,5 +2,6 @@
     <character-class
         ng-repeat="childModel in filteredClasses = (classes | filter: parentFilter)"
         siblings="filteredClasses.length"
-        model="childModel"/>
+        model="childModel"
+        classes="classes"/>
 </div>

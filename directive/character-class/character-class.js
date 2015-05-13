@@ -186,9 +186,10 @@ angular.module('AndProcRLData')
 		}
 	};
 })
-.controller('ModalClassEditCtrl', function($scope, $modalInstance, model, data){
+.controller('ModalClassEditCtrl', function($rootScope, $scope, $modal, $modalInstance, model, data, $timeout){
         $scope.model = model;
         $scope.data = data;
+        $scope.$modal = $modal;
 
         $scope.parentClasses = [];
         var roots = _.filter($scope.data.classes, function(e){return e.parent === void 0;});
@@ -202,9 +203,33 @@ angular.module('AndProcRLData')
         };
         findParentClasses(roots);
 
+        $scope.$watch('model.parent', function(){
+            $rootScope.$broadcast('classes:update');
+        });
+
         //$scope.noChildFilter = function(item) {
         //
         //    return item.parent === $scope.model.id;
+        //};
+
+        $timeout(function(){
+            var element = $('.character-class-form').find('.select-parent')[0];
+            element.addEventListener('dragstart', function(e){
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/html', this.innerHTML);
+                debugger;
+                    $('.modal').css('display', 'none');
+                    $('.modal-backdrop').css('display', 'none');
+            });
+            //element.addEventListener('dragend', function(){
+            //        $('.modal').css('display', 'block');
+            //        $('.modal-backdrop').css('display', 'block');
+            //});
+        });
+
+        //$scope.selectParent = function(){
+        //    $('.modal').css('display', 'none');
+        //    $('.modal-backdrop').css('display', 'none');
         //};
 
         $scope.ok = function () {

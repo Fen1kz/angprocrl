@@ -15,10 +15,11 @@
         <div class="form-group">
             <label class="col-md-3 control-label" for="model.parent">Parent</label>
             <div class="col-md-8">
-                <div class="row">
-                    <select ng-model='model.parent'
+                <div class="row form-inline">
+                    <select ng-model='model.parent' id="model.parent" name="model.parent"
                             ng-options="class as class for class in (parentClasses) track by class"
                             class="form-control input-md"></select>
+                    <button class='select-parent' draggable="true"><i class="fa fa-bullseye"></i></button>
                 </div>
             </div>
         </div>
