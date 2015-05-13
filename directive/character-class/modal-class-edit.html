@@ -27,7 +27,7 @@
             <label class="col-md-3 control-label">Attributes:</label>
             <div class="col-md-8">
                 <div class="attr" ng-repeat="attr in model.attributes">
-                    <label class="control-label" for="{{attr.id}}">{{attr.id}}({{getParentAttr(attr.id)}}): </label>
+                    <label class="control-label" for="{{attr.id}}">{{attr.id}}: {{attr.base}} +</label>
                     <input
                         ng-model="attr.value" id="{{attr.id}}" name="{{attr.id}}"
                            type="text" placeholder="{{attr.id}}"

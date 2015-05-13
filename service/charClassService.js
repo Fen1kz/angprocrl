@@ -33,8 +33,11 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
 
             service.update();
         }
+        , findClassIndexById: function(id){
+            return _.findIndex(service.data, function(e) {return e.id === id;});
+        }
         , findClassById: function(id){
-            return _.find(service.data, function(e) {return e.id === id;});
+            return (service.data[service.findClassIndexById(id)]);
         }
     };
     window.charClassService = service;

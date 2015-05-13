@@ -1,5 +1,8 @@
 angular.module('AndProcRLData')
-.directive('characterClass', function($rootScope, $document, $compile, dataService, charClassService, $modal, $templateCache, $templateRequest) {
+.directive('characterClass', function($rootScope,
+                                      $document, $timeout, $compile,
+                                      dataService, charClassService,
+                                      $modal, $templateCache, $templateRequest) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -46,6 +49,9 @@ angular.module('AndProcRLData')
              ===== Setup Watchers =====
              */
 
+            $scope.$watch('model.parent', function(newValue, oldValue) {
+                $scope.parent = charClassService.findClassById($scope.model.parent);
+            });
             $scope.$watch('model.id', function(newValue, oldValue) {
                 _.each($scope.classes, function(e){
                     if (e.parent === oldValue) {
@@ -53,6 +59,34 @@ angular.module('AndProcRLData')
                     }
                 });
             });
+            $scope.$watch('parent.attributes', function(newValue) {
+                if ($scope.parent) {
+                    _.each($scope.model.attributes, function (attr, i) {
+                        $scope.model.attributes[i].base = 0 + (+newValue[i].base || 0) + (+newValue[i].value || 0);
+                    });
+                }
+            }, true);
+            $scope.$watch('model.attributes', function(newAttributes) {
+                $scope._attributes_diff = _.reduce(newAttributes, function(memo, attr){
+                    return memo + (+attr.value || 0);
+                }, 0)
+            }, true);
+
+            /*
+             ===== Setup jQuery =====
+             */
+
+            //$scope.$evalAsync(function(){
+            $timeout(function(){
+                var p = $e.popover({
+                    content: $scope.model.id
+                    //,trigger: 'hover'
+                    ,trigger: 'manual'
+                    ,container: 'body'
+                    //,container: '#child-class-container'
+                });
+                p.popover('show')
+            }, 200);
 
             /*
              ===== Setup Events =====
@@ -63,6 +97,15 @@ angular.module('AndProcRLData')
                     if ($e.find('.character-class-children').length === 0) {
                         $scope.compileChildren();
                     }
+                }
+            });
+
+            $scope.$on('$destroy', function() {
+                console.log('im destroyd', $scope.model.id);
+                var $parent = $e.parent('.character-class-children');
+                $e.remove();
+                if ($parent.children('.character-class-wrapper').length === 0) {
+                    $parent.remove();
                 }
             });
 
@@ -103,86 +146,9 @@ angular.module('AndProcRLData')
                     console.log('dismissed');
                 });
             };
-            if ($scope.model.id === 'Fighter') {
-                $scope.edit();
-            }
-
-            //var droptarget;
-            //$e.find('.position').on('mousedown', function(e) {
-            //    var $characterClass = $(e.currentTarget).parents('.character-class');
-            //    var $target = $(e.target).clone();
-            //    $target.css('position', 'absolute');
-            //    $target.css('pointer-events', 'none');
-            //    $('body').append($target);
-            //
-            //    var tw = $target.width()/2;
-            //    var th = $target.height()/2;
-            //
-            //    $document.on('mouseenter.class.position', '.character-class', function(e) {
-            //        console.log('mouseenter', $characterClass, $(e.currentTarget));
-            //        if (!$(e.currentTarget).is($characterClass)) {
-            //            $(e.currentTarget).addClass('dropzone');
-            //        }
-            //    });
-            //    $document.on('mouseleave.class.position', '.character-class', function(e){
-            //        console.log('mouseleave', $(e.currentTarget));
-            //        $(e.currentTarget).removeClass('dropzone');
-            //    });
-            //
-            //    $document.on('mousemove.class.position', function(e){
-            //        $target.css('left', event.x - tw);
-            //        $target.css('top', event.y - th);
-            //    });
-            //    $document.on('mouseup.class.position', function(){
-            //        $document.off('.class.position');
-            //        var targetClass = $('.dropzone').attr('data-character-class');
-            //        $('.dropzone').removeClass('dropzone');
-            //        $target.remove();
-            //
-            //        if (targetClass) {
-            //            $scope.model.parent = targetClass;
-            //            $scope.$apply();
-            //            $rootScope.$broadcast('classes:update', $scope.$id);
-            //            $scope.$apply();
-            //        }
-            //    });
-            //});
-
-            //$scope.edit = function($event) {
-            //    $event.preventDefault();
-            //    $event.stopPropagation();
-            //
-            //    $scope.editing = true;
-            //
-            //    $scope.editModel = angular.extend({}, $scope.model);
-            //    //$scope.editModel = $scope.model;
-            //
-            //    var listener = function(e) {
-            //        var keyCode = (e.keyCode ? e.keyCode : e.which);
-            //        if (
-            //            (
-            //                keyCode == 13
-            //                || $(e.target).parents('.element').length === 0
-            //            )
-            //            && $e.find('input[ng-model*=".id"]').is('.ng-valid')
-            //        ) {
-            //            $document.off('click', listener);
-            //            $document.off('keyup', listener);
-            //            $scope.$apply(function() {
-            //                $scope.editing = false;
-            //                var oldIndex = $scope.index;
-            //                $scope.index = $scope.editModel.id;
-            //                $scope.classes[$scope.index] = $scope.editModel;
-            //                $scope.model = $scope.classes[$scope.index];
-            //                delete $scope.editModel;
-            //                delete $scope.classes[oldIndex];
-            //            });
-            //        }
-            //    };
-            //
-            //    $document.on('click', listener);
-            //    $document.on('keyup', listener);
-            //};
+            //if ($scope.model.id === 'Fighter') {
+            //    $scope.edit();
+            //}
 		}
 	};
 })
@@ -206,19 +172,6 @@ angular.module('AndProcRLData')
         $scope.$watch('model.parent', function(){
             $rootScope.$broadcast('classes:update');
         });
-
-        //$scope.noChildFilter = function(item) {
-        //
-        //    return item.parent === $scope.model.id;
-        //};
-        var _getParentAttrRecursion = function(attrIndex, charClass) {
-            var parent = charClassService.findClassById(charClass.parent);
-            return (parent) ? +parent.attributes[attrIndex].value + +_getParentAttrRecursion(attrIndex, parent) : 0;
-        };
-        $scope.getParentAttr = function(id) {
-            var attrIndex = _.findIndex(model.attributes, 'id', id);
-            return _getParentAttrRecursion(attrIndex, $scope.model)
-        };
 
         /*
          ===== Buttons =====

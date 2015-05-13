@@ -1,5 +1,5 @@
 <div class="col-md-12" ng-controller="ClassesCtrl">
-    <div class="character-class-container">
+    <div class="character-class-container" id="character-class-container">
         <character-class
             ng-repeat="model in filteredClasses = (charClassService.data | filter: isParentUndefined)"
             model="model"
