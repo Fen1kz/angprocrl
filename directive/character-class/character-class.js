@@ -1,19 +1,28 @@
 angular.module('AndProcRLData')
-.directive('characterClass', function($rootScope, $document, $compile, charClassService, $modal, $templateCache, $templateRequest) {
+.directive('characterClass', function($rootScope, $document, $compile, dataService, charClassService, $modal, $templateCache, $templateRequest) {
 	return {
 		restrict: 'E',
 		replace: true,
 		scope: {
             model: '=',
-            siblings: '='
+            siblings: '=',
+            classes: '='
             //index: '='
 		},
 		templateUrl: 'directive/character-class/character-class.html',
 		link: function($scope, $e, attrs, fn) {
-            $scope.charClassService = charClassService;
+
+            /*
+            ===== Initial Scope Setup =====
+            */
+
             $scope.parentFilter = function(item) {
                 return item.parent === $scope.model.id;
             };
+
+            /*
+             ===== Compiling Children Leafs =====
+             */
 
             $scope.compileChildren = function() {
                 if (charClassService.getClassesIndexes($scope.model.id).length > 0) {
@@ -33,22 +42,42 @@ angular.module('AndProcRLData')
                 $scope.compileChildren();
             }
 
+            /*
+             ===== Setup Watchers =====
+             */
+
             $scope.$watch('model.id', function(newValue, oldValue) {
-                _.each(charClassService.data, function(e){
+                _.each($scope.classes, function(e){
                     if (e.parent === oldValue) {
                         e.parent = newValue;
                     }
                 });
             });
 
+            /*
+             ===== Setup Events =====
+             */
+
             $scope.$on('classes:update', function(event, $id){
                 if ($scope.$id !== $id) {
-                    $scope.childClassesIndexes = charClassService.getClassesIndexes($scope.model.id);
                     if ($e.find('.character-class-children').length === 0) {
                         $scope.compileChildren();
                     }
                 }
             });
+
+            /*
+             ===== Setup Interaction =====
+             */
+
+            $scope.add = function(){
+                charClassService.addClass($scope.model);
+            };
+
+            $scope.remove = function(){
+                if (!confirm('rly?')) return;
+                charClassService.removeClass($scope.model);
+            };
 
             $scope.edit = function() {
                 var modalInstance = $modal.open({
@@ -58,7 +87,9 @@ angular.module('AndProcRLData')
                         model: function() {return $scope.model},
                         data: function() {
                             return {
-                                classes: charClassService.data
+                                classes: $scope.classes,
+                                attributes: dataService.attributes,
+                                traits: dataService.traits
                             };
                         }
                     },
@@ -117,15 +148,6 @@ angular.module('AndProcRLData')
             //    });
             //});
 
-            $scope.add = function(){
-                charClassService.addClass($scope.model);
-            };
-
-            $scope.remove = function(){
-                if (!confirm('rly?')) return;
-                charClassService.removeClass($scope.model);
-            };
-
             //$scope.edit = function($event) {
             //    $event.preventDefault();
             //    $event.stopPropagation();
@@ -150,10 +172,10 @@ angular.module('AndProcRLData')
             //                $scope.editing = false;
             //                var oldIndex = $scope.index;
             //                $scope.index = $scope.editModel.id;
-            //                charClassService.data[$scope.index] = $scope.editModel;
-            //                $scope.model = charClassService.data[$scope.index];
+            //                $scope.classes[$scope.index] = $scope.editModel;
+            //                $scope.model = $scope.classes[$scope.index];
             //                delete $scope.editModel;
-            //                delete charClassService.data[oldIndex];
+            //                delete $scope.classes[oldIndex];
             //            });
             //        }
             //    };
@@ -166,7 +188,24 @@ angular.module('AndProcRLData')
 })
 .controller('ModalClassEditCtrl', function($scope, $modalInstance, model, data){
         $scope.model = model;
-        $scope.classes = data.classes;
+        $scope.data = data;
+
+        $scope.parentClasses = [];
+        var roots = _.filter($scope.data.classes, function(e){return e.parent === void 0;});
+        var findParentClasses = function(parents) {
+            _.each(parents, function(parent){
+                if (parent.id !== $scope.model.id) {
+                    $scope.parentClasses.push(parent.id);
+                    findParentClasses(_.filter($scope.data.classes, 'parent', parent.id));
+                }
+            });
+        };
+        findParentClasses(roots);
+
+        //$scope.noChildFilter = function(item) {
+        //
+        //    return item.parent === $scope.model.id;
+        //};
 
         $scope.ok = function () {
             $modalInstance.close();

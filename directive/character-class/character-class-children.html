@@ -1,6 +1,6 @@
 <div class="character-class-children">
     <character-class
-        ng-repeat="childModel in filteredClasses = (charClassService.data | filter: parentFilter)"
+        ng-repeat="childModel in filteredClasses = (classes | filter: parentFilter)"
         siblings="filteredClasses.length"
         model="childModel"/>
 </div>

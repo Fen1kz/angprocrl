@@ -3,6 +3,8 @@
         <character-class
             ng-repeat="model in filteredClasses = (charClassService.data | filter: isParentUndefined)"
             model="model"
-            siblings="filteredClasses.length" />
+            siblings="filteredClasses.length"
+            classes="charClassService.data"
+            />
     </div>
 </div>
