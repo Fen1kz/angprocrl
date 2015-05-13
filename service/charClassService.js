@@ -8,7 +8,7 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
         }
 
         , getClassesIndexes: function (parent) {
-            console.log('getClassesIndexes called by ', parent);
+            //console.log('getClassesIndexes called by ', parent);
             var a = _.reduce(service.data, function (memo, e, index) {
                 if (e.parent == parent) {
                     memo.push(index);
@@ -32,6 +32,9 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
             delete service.data[model.id];
 
             service.update();
+        }
+        , findClassById: function(id){
+            return _.find(service.data, function(e) {return e.id === id;});
         }
     };
     window.charClassService = service;

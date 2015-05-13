@@ -211,26 +211,18 @@ angular.module('AndProcRLData')
         //
         //    return item.parent === $scope.model.id;
         //};
+        var _getParentAttrRecursion = function(attrIndex, charClass) {
+            var parent = charClassService.findClassById(charClass.parent);
+            return (parent) ? +parent.attributes[attrIndex].value + +_getParentAttrRecursion(attrIndex, parent) : 0;
+        };
+        $scope.getParentAttr = function(id) {
+            var attrIndex = _.findIndex(model.attributes, 'id', id);
+            return _getParentAttrRecursion(attrIndex, $scope.model)
+        };
 
-        $timeout(function(){
-            var element = $('.character-class-form').find('.select-parent')[0];
-            element.addEventListener('dragstart', function(e){
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/html', this.innerHTML);
-                debugger;
-                    $('.modal').css('display', 'none');
-                    $('.modal-backdrop').css('display', 'none');
-            });
-            //element.addEventListener('dragend', function(){
-            //        $('.modal').css('display', 'block');
-            //        $('.modal-backdrop').css('display', 'block');
-            //});
-        });
-
-        //$scope.selectParent = function(){
-        //    $('.modal').css('display', 'none');
-        //    $('.modal-backdrop').css('display', 'none');
-        //};
+        /*
+         ===== Buttons =====
+         */
 
         $scope.ok = function () {
             $modalInstance.close();
@@ -240,4 +232,67 @@ angular.module('AndProcRLData')
             $(".modal").modal("hide");
             $modalInstance.dismiss('cancel');
         };
+
+        /*
+         ===== Drag And Drop =====
+         */
+
+        $scope.$on('$destroy', function(){
+            $('.character-class-form').find('.select-parent').off('.dnd');
+            $(parentsSelector).off('.dnd');
+        });
+
+        var parentsSelector = '.character-class > .element';
+        $timeout(function(){
+            var $parentsAll = $(parentsSelector);
+
+            var $parents = $parentsAll.filter(function (i, e) {
+                return _.indexOf($scope.parentClasses, $(e).attr('data-character-class')) > -1;
+            });
+
+            $parents.on('drop.dnd', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var targetClass = $(e.target).attr('data-character-class');
+                $scope.model.parent = targetClass;
+                $scope.$apply();
+                return false;
+            });
+
+            $parents.on('dragenter.dnd', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                ///e.originalEvent.dataTransfer.dropEffect = "move";
+                this.classList.add('over');
+            });
+
+            $parents.on('dragover.dnd', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+
+            $parents.on('dragleave.dnd', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('over');
+            });
+
+            var $element = $('.character-class-form').find('.select-parent');
+            $element.on('dragstart.dnd', function (e) {
+                e.originalEvent.dataTransfer.effectAllowed = 'move';
+                e.originalEvent.dataTransfer.dropEffect = "move";
+                $timeout(function () {
+                    $('.modal').css('visibility', 'hidden');
+                    $('.modal-backdrop').css('visibility', 'hidden');
+                });
+            });
+            $element.on('dragend.dnd', function () {
+                $timeout(function () {
+                    $('.modal').css('visibility', 'visible');
+                    $('.modal-backdrop').css('visibility', 'visible');
+                });
+                $parents.removeClass('over');
+            });
+        });
     });

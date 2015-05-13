@@ -17,6 +17,9 @@
 
 .character-class-form .attr {
     display: inline-block;
+    label {
+        width: 6em;
+    }
     input {
         display: inline-block;
         width: 4em;
@@ -51,6 +54,7 @@
     min-height: @entry-min-height;
     cursor: pointer;
     .name {
+        pointer-events: none;
     }
     &:before {
         content: "";
@@ -129,4 +133,7 @@
         }
     }
 
+    &.over {
+        background: cornflowerblue;
+    }
 }
