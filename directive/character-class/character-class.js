@@ -1,8 +1,26 @@
 angular.module('AndProcRLData')
+    .service('characterClass_compiled', function($q, $compile, $templateRequest, $templateCache) {
+        var templateFnDefer = $q.defer();
+
+        var characterClass_compiled = {
+            templateFn: null,
+            templateFnPromise: templateFnDefer.promise,
+            popoverFn: $compile('<div>{{model.id}}</div>')
+        };
+
+        $templateRequest('directive/character-class/character-class-children.html')
+            .then(function () {
+                var template = $templateCache.get('directive/character-class/character-class-children.html');
+                characterClass_compiled.templateFn = $compile(template);
+                templateFnDefer.resolve();
+            });
+
+        return characterClass_compiled;
+    })
 .directive('characterClass', function($rootScope,
                                       $document, $timeout, $compile,
                                       dataService, charClassService,
-                                      $modal, $templateCache, $templateRequest) {
+                                      $modal, $templateCache, $templateRequest, characterClass_compiled) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -14,7 +32,6 @@ angular.module('AndProcRLData')
 		},
 		templateUrl: 'directive/character-class/character-class.html',
 		link: function($scope, $e, attrs, fn) {
-
             /*
             ===== Initial Scope Setup =====
             */
@@ -29,21 +46,15 @@ angular.module('AndProcRLData')
 
             $scope.compileChildren = function() {
                 if (charClassService.getClassesIndexes($scope.model.id).length > 0) {
-                    $compile(template)($scope, function (cloned, scope) {
+                    characterClass_compiled.templateFn($scope, function (cloned, scope) {
                         $e.append(cloned);
                     });
                 }
             };
-            var template = $templateCache.get('directive/character-class/character-class-children.html');
-            if (!template) {
-                $templateRequest('directive/character-class/character-class-children.html')
+            characterClass_compiled.templateFnPromise
                     .then(function () {
-                        template = $templateCache.get('directive/character-class/character-class-children.html');
                         $scope.compileChildren();
                     });
-            } else {
-                $scope.compileChildren();
-            }
 
             /*
              ===== Setup Watchers =====
@@ -73,29 +84,70 @@ angular.module('AndProcRLData')
             }, true);
 
             /*
-             ===== Setup jQuery =====
+             ===== Setup popover =====
              */
 
+            var $e_element = $e.children('.element')
+                .on("mouseenter.popover", function () {
+                    $scope.hover = true;
+                    $scope.$digest();
+                })
+                .on("mouseleave.popover", function () {
+                    $scope.hover = false;
+                    $scope.$digest();
+                });
+            $scope.$on('$destroy', function () {
+                $e_element.off('.popover');
+            });
+
+            $scope.pin = function($event) {
+                $event.stopPropagation();
+                $scope.popover_pin = !$scope.popover_pin;
+            };
+
             //$timeout(function(){
-            //var popover;
             //$scope.$evalAsync(function() {
             //    console.log('popover attached to ',$e.find('.element'));
             //
-            //    popover = $e.children('.element').popover({
-            //        content: '{{model.id}}'
-            //        ,trigger: 'hover'
-            //        //,trigger: 'manual'
-            //        ,html: true
-            //        ,position: 'bottom'
-            //    }).on('show.bs.popover', function(e) {
-            //        console.log('o hai');
-            //        //$scope.$apply();
-            //    })
-            //     .on('hidden.bs.popover', function() { console.log('ciao'); });
-            //    $scope.$on('$destroy', function() {
+            //    var content = characterClass_compiled.popoverFn($scope);
+            //    debugger;
+            //    var $e_element = $e.children('.element');
+            //    var popover =
+            //        $e_element.popover({
+            //            content: content
+            //            //,trigger: 'hover'
+            //            , trigger: 'manual'
+            //            , html: true
+            //            , position: 'bottom'
+            //        });
+            //        $e_element.popover().on('show.bs.popover', function (e) {
+            //                console.log('o hai');
+            //                //$scope.$apply();
+            //            })
+            //            .on('hidden.bs.popover', function () {
+            //                console.log('ciao');
+            //            })
+            //        $e_element.on("mouseenter.popover", function () {
+            //                var _this = this;
+            //                $(this).popover("show");
+            //                $(".popover").on("mouseleave", function () {
+            //                    $(_this).popover('hide');
+            //                });
+            //            })
+            //            .on("mouseleave.popover", function () {
+            //                var _this = this;
+            //                $timeout(function (e) {
+            //                    if (!$e_element.is(':hover') && !$(".popover:hover").length) {
+            //                        $(_this).popover("hide");
+            //                    }
+            //                }, 100);
+            //            });
+            //
+            //    $scope.$on('$destroy', function () {
             //        if (popover) {
             //            popover.off();
             //        }
+            //        $e_element.off()
             //    });
             //});
 
