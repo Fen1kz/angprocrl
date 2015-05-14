@@ -1,8 +1,10 @@
 
 //------- {{ Variables }} -------//
 
-@white: #000000;
-@bg: #ffffff;
+@text-color: #000;
+@background: #fff;
+@background-hover: #ccf;
+@background-children: #eef;
 
 @horizontal-gutter: 30px;
 @border-radius: 10px;
@@ -38,7 +40,7 @@
     &:before {
         content: "";
         width: @horizontal-gutter / 2;
-        border-top: 2px solid @white;
+        border-top: 2px solid @text-color;
         position: absolute;
         left: -@horizontal-gutter;
         top: 50%;
@@ -56,17 +58,21 @@
     .name {
         pointer-events: none;
     }
+    .edit:hover {
+        //text-decoration: underline;
+        color: #008000;
+    }
     &:before {
         content: "";
         height: 100%;
-        border-left: 2px solid @white;
+        border-left: 2px solid @text-color;
         position: absolute;
         left: -(@horizontal-gutter / 2);
     }
     &:after {
         content: "";
         width: @horizontal-gutter / 2;
-        border-top: 2px solid @white;
+        border-top: 2px solid @text-color;
         position: absolute;
         left: -(@horizontal-gutter / 2);
         top: 50%;
@@ -95,7 +101,7 @@
         &:after {
             height: @border-radius;
             border-top: none;
-            border-bottom: 2px solid @white;
+            border-bottom: 2px solid @text-color;
             border-radius: 0 0 0 @border-radius;
             margin-top: -@border-radius + 1px;
         }
@@ -119,7 +125,7 @@
     padding: 5px 10px;
     line-height: @label-height - 5px * 2;
     text-align: center;
-    border: 2px solid @white;
+    border: 2px solid @text-color;
     border-radius: @label-border-radius;
     position: absolute;
     left: 0;
@@ -127,9 +133,9 @@
     margin-top: -(@label-height / 2);
 
     &:hover {
-        background: #ddd;
+        background: @background-hover;
         +.character-class-children .element {
-            background: #eee;
+            background: @background-children;
         }
     }
 

@@ -26,7 +26,7 @@ angular.module('AndProcRLData').directive('attributesTraits', function($timeout,
                             formula = formula.replace(attr.id, '(+attributes['+attrIndex+'].value || 0)');
                         });
                         try {
-                            trait.fn = eval('(function(attributes){return (+this.base || 0) +' + formula + ';})');
+                            trait.fn = eval('(function(attributes){return (+this.base || 0) +' + formula + ';})'); // jshint ignore:line
                             trait.value = trait.fn($scope.attributes);
                         } catch (e) {
                             //console.log('Wrong formula');

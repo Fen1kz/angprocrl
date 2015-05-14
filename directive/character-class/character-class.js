@@ -69,24 +69,35 @@ angular.module('AndProcRLData')
             $scope.$watch('model.attributes', function(newAttributes) {
                 $scope._attributes_diff = _.reduce(newAttributes, function(memo, attr){
                     return memo + (+attr.value || 0);
-                }, 0)
+                }, 0);
             }, true);
 
             /*
              ===== Setup jQuery =====
              */
 
-            //$scope.$evalAsync(function(){
-            $timeout(function(){
-                var p = $e.popover({
-                    content: $scope.model.id
-                    //,trigger: 'hover'
-                    ,trigger: 'manual'
-                    ,container: 'body'
-                    //,container: '#child-class-container'
-                });
-                p.popover('show')
-            }, 200);
+            //$timeout(function(){
+            //var popover;
+            //$scope.$evalAsync(function() {
+            //    console.log('popover attached to ',$e.find('.element'));
+            //
+            //    popover = $e.children('.element').popover({
+            //        content: '{{model.id}}'
+            //        ,trigger: 'hover'
+            //        //,trigger: 'manual'
+            //        ,html: true
+            //        ,position: 'bottom'
+            //    }).on('show.bs.popover', function(e) {
+            //        console.log('o hai');
+            //        //$scope.$apply();
+            //    })
+            //     .on('hidden.bs.popover', function() { console.log('ciao'); });
+            //    $scope.$on('$destroy', function() {
+            //        if (popover) {
+            //            popover.off();
+            //        }
+            //    });
+            //});
 
             /*
              ===== Setup Events =====
@@ -122,7 +133,8 @@ angular.module('AndProcRLData')
                 charClassService.removeClass($scope.model);
             };
 
-            $scope.edit = function() {
+            $scope.edit = function($event) {
+                $event.stopPropagation();
                 var modalInstance = $modal.open({
                     animation: false,
                     templateUrl: 'directive/character-class/modal-class-edit.html',
