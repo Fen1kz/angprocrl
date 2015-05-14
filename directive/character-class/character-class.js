@@ -87,23 +87,23 @@ angular.module('AndProcRLData')
              ===== Setup popover =====
              */
 
-            var $e_element = $e.children('.element')
-                .on("mouseenter.popover", function () {
-                    $scope.hover = true;
-                    $scope.$digest();
-                })
-                .on("mouseleave.popover", function () {
-                    $scope.hover = false;
-                    $scope.$digest();
-                });
-            $scope.$on('$destroy', function () {
-                $e_element.off('.popover');
-            });
-
-            $scope.pin = function($event) {
-                $event.stopPropagation();
-                $scope.popover_pin = !$scope.popover_pin;
-            };
+            //var $e_element = $e.children('.element')
+            //    .on("mouseenter.popover", function () {
+            //        $scope.hover = true;
+            //        $scope.$digest();
+            //    })
+            //    .on("mouseleave.popover", function () {
+            //        $scope.hover = false;
+            //        $scope.$digest();
+            //    });
+            //$scope.$on('$destroy', function () {
+            //    $e_element.off('.popover');
+            //});
+            //
+            //$scope.pin = function($event) {
+            //    $event.stopPropagation();
+            //    $scope.popover_pin = !$scope.popover_pin;
+            //};
 
             //$timeout(function(){
             //$scope.$evalAsync(function() {
