@@ -1,4 +1,5 @@
-angular.module('AndProcRLData').directive('attributesTraits', function($timeout, OnRepeatEvents, dataService, attributeService) {
+angular.module('AndProcRLData')
+.directive('attributesTraits', function($timeout, dataService, attributeService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -20,19 +21,8 @@ angular.module('AndProcRLData').directive('attributesTraits', function($timeout,
                 trait.gfx.x = traitsx;
                 trait.gfx.y = stepy * index;
                 $scope.$watch('traits['+index+'].formula', function(formula) {
-                    console.log('formula watch');
-                    if (formula) {
-                        _.each($scope.attributes, function(attr, attrIndex) {
-                            formula = formula.replace(attr.id, '(+attributes['+attrIndex+'].value || 0)');
-                        });
-                        try {
-                            trait.fn = eval('(function(attributes){return (+this.base || 0) +' + formula + ';})'); // jshint ignore:line
-                            trait.value = trait.fn($scope.attributes);
-                        } catch (e) {
-                            //console.log('Wrong formula');
-                        }
-                        $scope.refreshLinks();
-                    }
+                    attributeService.makeTraitFn(trait, $scope.attributes);
+                    $scope.refreshLinks();
                 });
             });
 
@@ -41,7 +31,6 @@ angular.module('AndProcRLData').directive('attributesTraits', function($timeout,
                 e.gfx.y = stepy * index;
             });
 
-            //$scope.$on(OnRepeatEvents.LAST, function(event, element, attrs){
             //$scope.$evalAsync(function(event, element, attrs){
             $timeout(function(){
                 $scope.$watch('links', function(newValue) {

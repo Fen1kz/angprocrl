@@ -1,6 +1,6 @@
 <div class="col-md-12" ng-controller="HeroesCtrl">
     <div class="row clearfix">
-        <form class="col-md-5 form-horizontal">
+        <form class="col-md-3 form-horizontal">
             <div class="form-group">
                 <label class="col-md-3 control-label" for="hero.level">Level</label>
                 <div class="col-md-9">
@@ -15,15 +15,19 @@
                 <div class="col-md-9">
                     <select ng-model="hero.class" id="hero.class" name="hero.class"
                             class="form-control"
-                            ng-options="className for (className, class) in classes"
+                            ng-options="class.id for class in classes"
                         >
                     </select>
                 </div>
             </div>
         </form>
-        <div class="col-md-7">
+        <div class="col-md-4">
             <h3>Attributes</h3>
-            <div ng-repeat="trait in traits">{{trait.id}}: {{trait.value}}</div>
+            <div ng-repeat="attr in hero.attributes">{{attr.id}}: {{+attr.value + +attr.base}}</div>
+        </div>
+        <div class="col-md-5">
+            <h3>Traits</h3>
+            <div ng-repeat="trait in traits">{{trait.id}}: <trait trait="trait" attributes="hero.attributes"/></div>
         </div>
     </div>
 

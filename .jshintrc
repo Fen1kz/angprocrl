@@ -12,7 +12,9 @@
     "browser": true,
     "smarttabs": true,
     "laxbreak": true,
-    "-W008": false, //A leading decimal point can be confused with a dot
+
+    "laxcomma": true,
+    //"-W008": false, //A leading decimal point can be confused with a dot
     "-W018": false, //Confusing use of '!'
     "globals": {
         "jQuery": true,

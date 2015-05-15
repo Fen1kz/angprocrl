@@ -1,4 +1,4 @@
-angular.module('AndProcRLData').service('charClassService', function ($rootScope, dataService) {
+angular.module('AndProcRLData').service('charClassService', function ($rootScope, $window, dataService) {
     var service = {
         name: 'charClassService'
         , data: dataService.data.classes
@@ -8,7 +8,6 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
         }
 
         , getClassesIndexes: function (parent) {
-            //console.log('getClassesIndexes called by ', parent);
             var a = _.reduce(service.data, function (memo, e, index) {
                 if (e.parent == parent) {
                     memo.push(index);

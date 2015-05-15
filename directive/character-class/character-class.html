@@ -1,12 +1,18 @@
     <div class="character-class" ng-class="{'sole' : siblings == 1}" data-character-class="{{model.id}}">
+        <!--
+            ns-popover-group="character-class"
+        -->
         <div
             class="element"
-            ng-click="edit($event)"
             data-character-class="{{model.id}}"
-            ns-popover-template="'directive/character-class/popover-characted-class.html'"
+            ng-click="edit($event)"
+            ns-popover="true"
+            ns-popover-template="directive/character-class/popover-character-class.html"
             ns-popover-trigger="mouseenter"
-            ns-popover-group="character-class"
+            ns-popover-placement="left|top"
+            ns-popover-timeout="0.2"
             >
+            <!--{{popover_pin}}-->
             <!-- [data-character-class] for drag & drop -->
             <span class="name">{{model.id}}</span> <span class="attrs">({{_attributes_diff}})</span>
         </div>

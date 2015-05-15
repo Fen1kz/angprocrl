@@ -17,7 +17,7 @@ angular.module('AndProcRLData')
 
         return characterClass_compiled;
     })
-.directive('characterClass', function($rootScope,
+.directive('characterClass', function($rootScope, $window,
                                       $document, $timeout, $compile,
                                       dataService, charClassService,
                                       $modal, $templateCache, $templateRequest, characterClass_compiled) {
@@ -87,69 +87,12 @@ angular.module('AndProcRLData')
              ===== Setup popover =====
              */
 
-            //var $e_element = $e.children('.element')
-            //    .on("mouseenter.popover", function () {
-            //        $scope.hover = true;
-            //        $scope.$digest();
-            //    })
-            //    .on("mouseleave.popover", function () {
-            //        $scope.hover = false;
-            //        $scope.$digest();
-            //    });
-            //$scope.$on('$destroy', function () {
-            //    $e_element.off('.popover');
-            //});
-            //
-            //$scope.pin = function($event) {
-            //    $event.stopPropagation();
-            //    $scope.popover_pin = !$scope.popover_pin;
-            //};
-
-            //$timeout(function(){
-            //$scope.$evalAsync(function() {
-            //    console.log('popover attached to ',$e.find('.element'));
-            //
-            //    var content = characterClass_compiled.popoverFn($scope);
-            //    debugger;
-            //    var $e_element = $e.children('.element');
-            //    var popover =
-            //        $e_element.popover({
-            //            content: content
-            //            //,trigger: 'hover'
-            //            , trigger: 'manual'
-            //            , html: true
-            //            , position: 'bottom'
-            //        });
-            //        $e_element.popover().on('show.bs.popover', function (e) {
-            //                console.log('o hai');
-            //                //$scope.$apply();
-            //            })
-            //            .on('hidden.bs.popover', function () {
-            //                console.log('ciao');
-            //            })
-            //        $e_element.on("mouseenter.popover", function () {
-            //                var _this = this;
-            //                $(this).popover("show");
-            //                $(".popover").on("mouseleave", function () {
-            //                    $(_this).popover('hide');
-            //                });
-            //            })
-            //            .on("mouseleave.popover", function () {
-            //                var _this = this;
-            //                $timeout(function (e) {
-            //                    if (!$e_element.is(':hover') && !$(".popover:hover").length) {
-            //                        $(_this).popover("hide");
-            //                    }
-            //                }, 100);
-            //            });
-            //
-            //    $scope.$on('$destroy', function () {
-            //        if (popover) {
-            //            popover.off();
-            //        }
-            //        $e_element.off()
-            //    });
-            //});
+            $scope.pin = function($event) {
+                $event.stopPropagation();
+                var $parent = $($event.currentTarget).parents('.ns-popover-list-theme')
+                            .toggleClass('ns-popover-always-show');
+                $scope.pinned = $parent.is('.ns-popover-always-show');
+            };
 
             /*
              ===== Setup Events =====
@@ -181,7 +124,7 @@ angular.module('AndProcRLData')
             };
 
             $scope.remove = function(){
-                if (!confirm('rly?')) return;
+                if (!$window.confirm('rly?')) return; // jshint ignore:line
                 charClassService.removeClass($scope.model);
             };
 
@@ -191,7 +134,7 @@ angular.module('AndProcRLData')
                     animation: false,
                     templateUrl: 'directive/character-class/modal-class-edit.html',
                     resolve: {
-                        model: function() {return $scope.model},
+                        model: function() {return $scope.model;},
                         data: function() {
                             return {
                                 classes: $scope.classes,

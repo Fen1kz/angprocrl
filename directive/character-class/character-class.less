@@ -28,6 +28,35 @@
     }
 }
 
+.character-class-popover {
+    padding: .25em 1em;
+    background: @background;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px 0px black;
+    .title {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+    .attributes {
+        .col-1 {
+            margin-left: 4em;
+        }
+        .col-0 {
+            float: left;
+        }
+        .txt {
+            font-weight: bold;
+            display: inline-block;
+            width: 2.5em;
+        }
+    }
+}
+
+.ns-popover-always-show {
+    display: block !important;
+}
+
 //------- {{ Tree }} -------//
 
 .character-class-container {
@@ -61,17 +90,6 @@
     .edit:hover {
         //text-decoration: underline;
         color: #008000;
-    }
-    .hover {
-        position: absolute;
-        padding: .25em 1em;
-        background: @background;
-        border: 1px solid #eee;
-        border-radius: 5px;
-        box-shadow: 2px 2px 4px 0px black;
-        .title {
-
-        }
     }
     &:before {
         content: "";

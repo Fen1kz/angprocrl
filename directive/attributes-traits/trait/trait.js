@@ -1,4 +1,4 @@
-angular.module('AndProcRLData').directive('trait', function() {
+angular.module('AndProcRLData').directive('trait', function(attributeService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -9,12 +9,10 @@ angular.module('AndProcRLData').directive('trait', function() {
 		templateUrl: 'directive/attributes-traits/trait/trait.html',
 		link: function($scope, element, attrs, fn) {
             var updateValue = function() {
-                //console.log('watched');
-                try {
-                    $scope.trait.value = $scope.trait.fn ? $scope.trait.fn($scope.attributes) : 0;
-                } catch (e) {
-                    //console.log('Wrong formula');
+                if (!$scope.trait.fn) {
+                    attributeService.makeTraitFn($scope.trait, $scope.attributes);
                 }
+                $scope.trait.value = $scope.trait.fn($scope.attributes);
             };
 
             _.each($scope.attributes, function(attr, index){

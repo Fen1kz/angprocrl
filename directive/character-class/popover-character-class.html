@@ -1,5 +1,16 @@
-<a class="pull-right" ng-click="pin($event)"><i class="fa fa-pinterest-p"></i></a>
-<div class="h1">{{model.id}}</div>
-<div>
-    <div ng-repeat="attr in model.attributes">{{attr.id}}: {{+attr.base + +attr.value}}</div>
+<div class="character-class-popover">
+    <div class="title">
+        {{model.id}}
+        <a class="pin" ng-click="pin($event)">
+            <i class="fa " ng-class="{'fa-pinterest-p' : !pinned, 'fa-pinterest-square' : pinned}"></i>
+        </a>
+    </div>
+    <div class="attributes">
+        <div ng-repeat="attr in model.attributes"
+            class="attribute col-{{$index % 2}}"
+            >
+            <span class="txt">{{attr.id}}: </span>
+            <span class="value">{{+attr.base + +attr.value}}</span>
+        </div>
+    </div>
 </div>
