@@ -6,7 +6,7 @@ angular.module('AndProcRLData').directive('trait', function(attributeService) {
             trait: '=',
             attributes: '='
 		},
-		templateUrl: 'directive/attributes-traits/trait/trait.html',
+		templateUrl: 'modules/attrs-traits/trait/trait.html',
 		link: function($scope, element, attrs, fn) {
             var updateValue = function() {
                 if (!$scope.trait.fn) {

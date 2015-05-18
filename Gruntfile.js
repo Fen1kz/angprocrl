@@ -191,6 +191,9 @@ module.exports = function (grunt) {
         autoWatch: false, //watching is handled by grunt-contrib-watch
         singleRun: true
       },
+      fast_test: {
+          browsers: ['PhantomJS']
+      },
       all_tests: {
         browsers: ['PhantomJS','Chrome','Firefox']
       },
@@ -203,6 +206,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','clean:after']);
   grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:read','karma:all_tests']);
+  grunt.registerTask('fast_test',['dom_munger:read','karma:fast_test']);
 
   grunt.event.on('watch', function(action, filepath) {
     //https://github.com/gruntjs/grunt-contrib-watch/issues/156

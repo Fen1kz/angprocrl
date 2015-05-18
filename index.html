@@ -30,19 +30,26 @@
 <!-- Main App JS -->
 <script src="app.js"></script>
 <script src="partial/home/home.js"></script>
-<script src="service/dataService.js"></script>
 <script src="directive/character-class/character-class.js"></script>
 <script src="directive/util/on-repeat-events.js"></script>
 <script src="directive/util/rl-unique.js"></script>
 <script src="service/charClassService.js"></script>
-<script src="service/storageService.js"></script>
 <script src="partial/debug-display/debug-display.js"></script>
-<script src="service/attributeService.js"></script>
 <script src="directive/attributes-traits/attributes-traits.js"></script>
 <script src="partial/classes/classes.js"></script>
 <script src="partial/attrs/attrs.js"></script>
 <script src="partial/heroes/heroes.js"></script>
-<script src="directive/attributes-traits/trait/trait.js"></script>
+<script src="modules/attrs-traits/trait/trait.js"></script>
+<script src="module/stats/stats.js"></script>
+<script src="module/stats/model/attribute.js"></script>
+<script src="module/stats/service/attributeService.js"></script>
+<script src="module/stats/model/AttributeCollection.js"></script>
+<script src="module/data/data.js"></script>
+<script src="module/data/storageService.js"></script>
+<script src="module/data/dataService.js"></script>
+<script src="module/data/charClass.js"></script>
+<script src="module/hero/hero.js"></script>
+<script src="module/hero/model/hero.js"></script>
 <!-- Add New Component JS Above -->
 
 <div class="container-fluid" ng-controller="AppCtrl">

@@ -1,6 +1,5 @@
-if (console) {console.clear();}
-
-angular.module('AndProcRLData', ['ui.bootstrap','ui.utils','ui.router','ngAnimate','nsPopover']);
+if (console.clear) {console.clear();}
+angular.module('AndProcRLData', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'nsPopover', 'stats', 'data', 'hero']);
 
 angular.module('AndProcRLData').config(function($stateProvider, $urlRouterProvider) {
     $stateProvider

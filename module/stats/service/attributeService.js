@@ -1,7 +1,10 @@
 angular.module('AndProcRLData').factory('attributeService',function(dataService) {
 
 	var attributeService = {
-        refreshLinks: function() {
+        getAttributeValue: function(heroAttr, classAttr, attr) {
+
+        }
+        ,refreshLinks: function() {
             var links = [];
             _.each(dataService.data.traits, function(trait, traitIndex) {
                 _.each(dataService.data.attributes, function(attr, attrIndex) {
@@ -19,7 +22,8 @@ angular.module('AndProcRLData').factory('attributeService',function(dataService)
             var formula = trait.formula;
             if (formula) {
                 _.each(attributes, function(attr, attrIndex) {
-                    formula = formula.replace(attr.id, '+attributes['+attrIndex+'].getValue()');
+                    formula = formula.replace(attr.id, '(+attributes['+attrIndex+'].value || 0)');
+                    //formula = formula.replace(attr.id, '+attributes['+attrIndex+'].getValue()');
                 });
                 try {
                     trait.fn = eval('(function(attributes){return (+this.base || 0) +' + formula + ';})'); // jshint ignore:line

@@ -1,4 +1,4 @@
-angular.module('AndProcRLData').factory('storageService',function() {
+angular.module('data').factory('storageService',function() {
 	var storageService = {
         get data() {
             var data = {};
