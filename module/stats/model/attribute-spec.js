@@ -4,19 +4,20 @@ describe('Attributes tests', function () {
 
     it('should get ID', inject(function (Attribute) {
         var STR = new Attribute('STR');
-        expect(STR.id).toEqual('STR');
+        expect(STR.id()).toEqual('STR');
     }));
 
     it('should get different ID', inject(function (Attribute) {
         var STR = new Attribute('STR');
         var AGI = new Attribute('AGI');
-        expect(STR.id).toEqual('STR');
-        expect(AGI.id).toEqual('AGI');
+        expect(STR.id()).toEqual('STR');
+        expect(AGI.id()).toEqual('AGI');
     }));
 
     it('should inherit id', inject(function (Attribute, ClassAttribute, HeroAttribute) {
         var classSTR = new ClassAttribute('STR');
-        expect(classSTR.id).toEqual('STR');
+        console.log('ClassAttribute.OUT', classSTR.id, classSTR._super, classSTR.constructor);
+        expect(classSTR.id()).toEqual('STR');
     }));
 
     it('should inherit', inject(function (Attribute, ClassAttribute, HeroAttribute) {
