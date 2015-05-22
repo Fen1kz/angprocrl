@@ -36,61 +36,51 @@ angular.module('data').factory('storageService',function() {
                 if (!e.gfx) e.gfx = {};
                 return e;
             });
-            data.classes = _.map([
-                {id: 'Adventurer'},
+            data.seeds_classes = _.map([
+                {name: 'Adventurer'},
                 //'Shaman':{},
-                {id: 'Fighter', parent: 'Adventurer'},
-                  {id: 'Knight', parent: 'Fighter'},
-                    {id: 'Baron', parent: 'Knight'},
-                      {id: 'Lord', parent: 'Baron'},
-                    {id: 'Crusader', parent: 'Knight'},
-                      {id: 'Inquisitor', parent: 'Crusader'},
-                      {id: 'Paladin', parent: 'Crusader'},
-                    {id: 'Death Knight', parent: 'Knight'},
-                      {id: 'Death Lord', parent: 'Death Knight'},
-                  {id: 'Warrior', parent: 'Fighter'},
-                    {id: 'Barbarian', parent: 'Warrior'},
-                      {id: 'Berserker', parent: 'Barbarian'},
-                    {id: 'Warlord', parent: 'Warrior'},
-                      {id: 'Chieftain', parent: 'Warlord'},
-                {id: 'Bandit', parent: 'Adventurer'},
-                  {id: 'Rogue', parent: 'Bandit'},
-                    {id: 'Ninja', parent: 'Rogue'},
-                      {id: 'Shadow', parent: 'Ninja'},
-                    {id: 'Killer', parent: 'Rogue'},
-                      {id: 'Assassin', parent: 'Killer'},
-                {id: 'Ranger', parent: 'Bandit'},
-                  {id: 'Hunter', parent: 'Ranger'},
-                    {id: 'Predator', parent: 'Hunter'},
-                    {id: 'Druid', parent: 'Hunter'},
-                  {id: 'Marksman', parent: 'Ranger'},
-                    {id: 'Sniper', parent: 'Marksman'},
-                    {id: 'Artillerist', parent: 'Marksman'},
-                {id: 'Wizard', parent: 'Adventurer'},
-                  {id: 'Sorcerer', parent: 'Wizard'},
-                    {id: 'Mage', parent: 'Sorcerer'},
-                      {id: 'Archmage', parent: 'Mage'},
-                    {id: 'Necromancer', parent: 'Sorcerer'},
-                      {id: 'Lich', parent: 'Necromancer'},
-                    {id: 'Witch', parent: 'Sorcerer'},
-                      {id: 'Warlock', parent: 'Witch'},
-                  {id: 'Acolyte', parent: 'Wizard'},
-                    {id: 'Monk', parent: 'Acolyte'},
-                      {id: 'Fanatic', parent: 'Monk'},
-                      {id: 'Exalted', parent: 'Monk'},
-                    {id: 'Priest', parent: 'Acolyte'},
-                      {id: 'Bishop', parent: 'Priest'}
-            ], function (e, id) {
-                e.attributes = _.reduce(data.attributes, function(memo, e) {
-                    memo.push({
-                        id: e.id,
-                        value: 0
-                    });
-                    return memo;
-                }, []);
-                return e;
-            });
-            _.each(data.classes[0].attributes, function(attr){attr.value = 1;});
+                {name: 'Fighter', parent: 'Adventurer'},
+                  {name: 'Knight', parent: 'Fighter'},
+                    {name: 'Baron', parent: 'Knight'},
+                      {name: 'Lord', parent: 'Baron'},
+                    {name: 'Crusader', parent: 'Knight'},
+                      {name: 'Inquisitor', parent: 'Crusader'},
+                      {name: 'Paladin', parent: 'Crusader'},
+                    {name: 'Death Knight', parent: 'Knight'},
+                      {name: 'Death Lord', parent: 'Death Knight'},
+                  {name: 'Warrior', parent: 'Fighter'},
+                    {name: 'Barbarian', parent: 'Warrior'},
+                      {name: 'Berserker', parent: 'Barbarian'},
+                    {name: 'Warlord', parent: 'Warrior'},
+                      {name: 'Chieftain', parent: 'Warlord'},
+                {name: 'Bandit', parent: 'Adventurer'},
+                  {name: 'Rogue', parent: 'Bandit'},
+                    {name: 'Ninja', parent: 'Rogue'},
+                      {name: 'Shadow', parent: 'Ninja'},
+                    {name: 'Killer', parent: 'Rogue'},
+                      {name: 'Assassin', parent: 'Killer'},
+                {name: 'Ranger', parent: 'Bandit'},
+                  {name: 'Hunter', parent: 'Ranger'},
+                    {name: 'Predator', parent: 'Hunter'},
+                    {name: 'Druid', parent: 'Hunter'},
+                  {name: 'Marksman', parent: 'Ranger'},
+                    {name: 'Sniper', parent: 'Marksman'},
+                    {name: 'Artillerist', parent: 'Marksman'},
+                {name: 'Wizard', parent: 'Adventurer'},
+                  {name: 'Sorcerer', parent: 'Wizard'},
+                    {name: 'Mage', parent: 'Sorcerer'},
+                      {name: 'Archmage', parent: 'Mage'},
+                    {name: 'Necromancer', parent: 'Sorcerer'},
+                      {name: 'Lich', parent: 'Necromancer'},
+                    {name: 'Witch', parent: 'Sorcerer'},
+                      {name: 'Warlock', parent: 'Witch'},
+                  {name: 'Acolyte', parent: 'Wizard'},
+                    {name: 'Monk', parent: 'Acolyte'},
+                      {name: 'Fanatic', parent: 'Monk'},
+                      {name: 'Exalted', parent: 'Monk'},
+                    {name: 'Priest', parent: 'Acolyte'},
+                      {name: 'Bishop', parent: 'Priest'}
+            ]);
             return data;
         }
         , load: function (key, defaultData) {

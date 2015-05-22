@@ -192,14 +192,16 @@ module.exports = function (grunt) {
         singleRun: true
       },
       fast_test: {
-          browsers: ['PhantomJS']
+          logLevel:'ERROR',
+          browsers: ['PhantomJS'],
+          reporters:['dots']
       },
       all_tests: {
         browsers: ['PhantomJS','Chrome','Firefox']
       },
       during_watch: {
         browsers: ['PhantomJS']
-      },
+      }
     }
   });
 
