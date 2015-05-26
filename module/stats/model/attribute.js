@@ -19,7 +19,7 @@ angular.module('stats')
     ,WIZ: 'WIZ'
 })
 .constant('ATTR_DATA', {
-    STR: {id: 'STR', COLOR: '#F00'}
+    STR:  {id: 'STR', COLOR: '#F00'}
     ,AGI: {id: 'AGI', COLOR: '#0F0'}
     ,VIT: {id: 'VIT', COLOR: '#0FF'}
     ,CON: {id: 'CON', COLOR: '#080'}
@@ -29,21 +29,47 @@ angular.module('stats')
     ,WIZ: {id: 'WIZ', COLOR: '#F90'}
 })
 .factory('Attribute', function(ATTR) {
-    var Attribute = _.inherit(Object, function Attribute(_id) {
-        this._id = _id;
-        this._value = 0;
-    }, {
-        id: function() {
-            return this._id;
-        }
-        ,value: function(value) {
+    function Attribute(name) {
+        this.id = _.uniqueId('Attribute_');
+        this.name = name;
+        this.$value = 0;
+        this.$base = 0;
+        this.$children = [];
+    }
+    _.assign(Attribute.prototype, {
+        value: function(value) {
             if (value === void 0) {
-                return this._value;
+                return this.$base + this.$value;
             } else {
-                this._value = value;
+                this.$value = value;
+                _.each(this.$children, function(attr){
+                    attr.base(this.value());
+                }, this);
             }
         }
+        ,base: function(base) {
+            if (base === void 0) {
+                return this.$base;
+            } else {
+                this.$base = base;
+                _.each(this.$children, function(attr){
+                    attr.base(this.value());
+                }, this);
+            }
+        }
+        ,$linkChild: function(childAttribute) {
+            if (childAttribute.$parent) throw new Error('Attribute::$parent exists');
+            childAttribute.$parent = this;
+            childAttribute.base(this.value());
+            this.$children.push(childAttribute);
+        }
+        ,$unlinkChild: function(childAttribute) {
+            childAttribute.$parent = null;
+            childAttribute.base(0);
+            _.remove(this.$children, 'id', childAttribute.id);
+        }
     });
+
     _.forIn(ATTR, function (value, key) {
         Attribute[key] = {
             new: function() {
@@ -54,16 +80,3 @@ angular.module('stats')
 
     return Attribute;
 })
-//.factory('ClassAttribute', function(Attribute) {
-//    return _.inherit(Attribute, function ClassAttribute(_id, cls) {
-//        Attribute.call(this, _id, cls);
-//        this._cls = cls;
-//    }, {
-//
-//    });
-//})
-//.factory('HeroAttribute', function(ClassAttribute) {
-//    return _.inherit(ClassAttribute, function HeroAttribute() {
-//
-//    }, {});
-//});

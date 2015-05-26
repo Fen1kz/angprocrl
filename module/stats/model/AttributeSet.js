@@ -1,16 +1,16 @@
 angular.module('stats')
 .factory('AttributeSet',function(ATTR, Attribute) {
     function AttributeSet() {
-        this._data = {};
+        this.$data = {};
         _.forIn(ATTR, function (attr, attrID) {
-            this._data[attrID] = new Attribute(attrID)
+            this.$data[attrID] = new Attribute(attrID)
         }, this);
         this.$apply(arguments);
     }
     _.forIn(ATTR, function (attr, attrID) {
         Object.defineProperty(AttributeSet.prototype, attrID, {
             get: function () {
-                return this._data[attrID];
+                return this.$data[attrID];
             }
         });
     });
@@ -19,10 +19,16 @@ angular.module('stats')
         $apply: function(args) {
             var i = 0;
             _.forIn(ATTR, function (attr, attrID) {
-                this._data[attrID] = new Attribute(attrID)
-                this._data[attrID].value(args[i] || 0);
+                this.$data[attrID] = new Attribute(attrID)
+                this.$data[attrID].value(args[i] || 0);
                 ++i;
             }, this);
+        },
+        $linkToChild: function($childAttributes) {
+            _.each(this.$data, function(attr) {
+
+            });
+            return this;
         }
     });
 

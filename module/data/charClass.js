@@ -20,6 +20,18 @@ angular.module('data')
         };
         return set;
     })
+    //.factory('CharClassAttributeSet', function(AttributeSet) {
+    //    function CharClassAttributeSet() {
+    //        AttributeSet.apply(this, arguments);
+    //        this.$childAttributes = [];
+    //    }
+    //
+    //    return _.inherit(AttributeSet, CharClassAttributeSet, {
+    //        $linkToChild: function($childAttributes) {
+    //            this.$childAttributes.push($childAttributes);
+    //        }
+    //    });
+    //})
     .factory('CharClass', function (charClassSet, AttributeSet) {
         function CharClass(name) {
             if (!name) throw new Error('[name] is undefined', 'CharClassException');
@@ -27,24 +39,44 @@ angular.module('data')
 
             this.id = _.uniqueId('charClass_');
             this.name = name;
+            this.$attributes = new AttributeSet();
         }
 
         _.assign(CharClass.prototype, {
-            addById: function (parentID) {
-                if (parentID && !charClassSet.byId(parentID)) throw new Error('Parent doesn\'t exist', 'CharClassException');
-                this.parentID = parentID;
+            attributes: function() {
+                if (arguments.length === 0) {
+                    return this.$attributes;
+                } else {
+                    this.$attributes.$apply(arguments);
+                    return this;
+                }
+                throw new Error("CharClass::attributes error");
+            }
+            ,addById: function (parentID) {
+                var parent = charClassSet.byId(parentID);
+                if (parentID && !parent) throw new Error('Parent doesn\'t exist', 'CharClassException');
                 charClassSet.addClass(this);
+                if (parent) this.$linkToParent(parent);
                 return this;
             }
             ,addByName: function (parentName) {
                 if (parentName) {
                     var parent = charClassSet.byName(parentName);
                     if (!parent) throw new Error('Parent doesn\'t exist', 'CharClassException');
-                    this.parentID = parent.id;
+                    return this.addById(parent.id);
                 } else {
-                    this.parentID = parentName;
+                    return this.addById(parentName);
                 }
-                charClassSet.addClass(this);
+            }
+            ,parent: function() {
+                return charClassSet.byId(this.parentID);
+            }
+            ,children: function() {
+                return _.filter(charClassSet.$data, 'parentID', this.id);
+            }
+            ,$linkToParent: function(parent) {
+                this.parentID = parent;
+                parent.attributes().$linkToChild(this.$attributes);
                 return this;
             }
         });
