@@ -26,4 +26,17 @@ describe('AttributeSet TEST', function() {
       expect(attributes.WIZ.value()).toEqual(8);
   }));
 
+  it('should $apply', inject(function(AttributeSet) {
+      var attributes = new AttributeSet(1,2,3,4,5,6,7,8);
+      attributes.$apply([8,7,6,5,4,3]);
+      expect(attributes.STR.value()).toEqual(8);
+      expect(attributes.AGI.value()).toEqual(7);
+      expect(attributes.VIT.value()).toEqual(6);
+      expect(attributes.CON.value()).toEqual(5);
+      expect(attributes.LUK.value()).toEqual(4);
+      expect(attributes.SPD.value()).toEqual(3);
+      expect(attributes.INT.value()).toEqual(0);
+      expect(attributes.WIZ.value()).toEqual(0);
+  }));
+
 });

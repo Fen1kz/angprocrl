@@ -1,19 +1,31 @@
-angular.module('AndProcRLData').service('charClassService', function ($rootScope, $window, dataService, CharClass) {
+angular.module('data')
+.service('charClassService', function ($rootScope, $window, dataService,
+                                       charClassSet, CharClass) {
+    var recursiveImport = function(seed) {
+    };
     var service = {
-        start: function() {
+        $: charClassSet
+        ,start: function() {
             this.import(dataService.data.seeds_classes);
         }
         , flush: function() {
-            this.$data = {}
-            this.cls = {}
+            charClassSet.flush();
         }
         , import: function(seeds) {
             this.flush();
-            var seedArray = _.copy(seeds);
+            console.log('imported')
 
-            _.each(seedArray, function (seed){
-                service.addClass(new CharClass(seed.name, seed.parent));
-            }, this)
+            for (var i = 50; i > 0 && seeds.length > 0; --i) {
+                seeds = _.filter(seeds, function (seed){
+                    if (!seed.parent || charClassSet.byName(seed.parent)) {
+                        new CharClass(seed.name)
+                            .addByName(seed.parent);
+                        return false;
+                    }
+                    return true;
+                }, this);
+            }
+            if (seeds.length > 0) throw new Error("Invalid seed, not all matched", "charClassService");
 
             service.update();
         }
@@ -26,32 +38,9 @@ angular.module('AndProcRLData').service('charClassService', function ($rootScope
             console.log('classes:update')
             $rootScope.$broadcast('classes:update');
         }
-        , getClassesIndexes: function (parent) {
-            var a = _.reduce(service.$data, function (memo, e, index) {
-                if (e.parent == parent) {
-                    memo.push(index);
-                }
-                return memo;
-            }, []);
-            return a;
-        }
-        , getById: function(id){
-            return service.$data[id];
-        }
-        , addClass: function (model) {
-            service.$data[model.id] = model;
-            Object.defineProperty(service.cls, model.name, {
-                get: function() {
-                    return model;
-                }
-            });
-        }
-        , removeClass: function (model) {
-            delete service.$data[model.id];
-        }
     };
 
-    service.start();
+    //service.start();
     window.charClassService = service;
     return service;
 });

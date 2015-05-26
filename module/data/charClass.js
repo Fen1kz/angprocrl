@@ -5,55 +5,49 @@ angular.module('data')
             flush: function() {
                 this.$data = {};
             }
-            ,id: function(id) {
+            ,byId: function(id) {
                 return this.$data[id];
+            }
+            ,byName: function(name) {
+                return _.find(this.$data, 'name', name);
             }
             ,addClass: function(model) {
                 this.$data[model.id] = model;
             }
+            ,removeClass: function(model) {
+                delete this.$data[model.id];
+            }
         };
         return set;
     })
-    .factory('CharClassBase', function (charClassSet, AttributeSet) {
-        function CharClassBase(name) {
+    .factory('CharClass', function (charClassSet, AttributeSet) {
+        function CharClass(name) {
             if (!name) throw new Error('[name] is undefined', 'CharClassException');
+            if (typeof name !== 'string') throw new Error('[name] is not String', 'CharClassException');
 
             this.id = _.uniqueId('charClass_');
             this.name = name;
         }
-        return CharClassBase;
-    })
-    .factory('CharClass', function (CharClassBase, charClassSet, AttributeSet) {
-        function CharClass(charClassBase, parentID) {
-            if (parentID && !charClassSet.id(parentID)) throw new Error('Parent doesn\'t exist', 'CharClassException');
-            CharClassBase.apply(this, arguments);
 
-            this.parentID = parentID;
-            charClassSet.addClass(this);
-        }
-
-        _.inherit(CharClassBase, CharClass, {
-            addChild: function(charClassBase) {
-                return new CharClass(charClassBase, this.id);
+        _.assign(CharClass.prototype, {
+            addById: function (parentID) {
+                if (parentID && !charClassSet.byId(parentID)) throw new Error('Parent doesn\'t exist', 'CharClassException');
+                this.parentID = parentID;
+                charClassSet.addClass(this);
+                return this;
+            }
+            ,addByName: function (parentName) {
+                if (parentName) {
+                    var parent = charClassSet.byName(parentName);
+                    if (!parent) throw new Error('Parent doesn\'t exist', 'CharClassException');
+                    this.parentID = parent.id;
+                } else {
+                    this.parentID = parentName;
+                }
+                charClassSet.addClass(this);
+                return this;
             }
         });
-
-        //_.assign(CharClass.prototype, {
-        //    $classes: {},
-        //    $updateClasses: function () {
-        //        _.each(dataService.data.classesSeed, function (seed) {
-        //            this.$classes[seed.id] = new CharClass(seed.id, seed.parent);
-        //        }, this);
-        //    }
-        //});
-        //
-        //Object.defineProperty(CharClass, 'get', {
-        //    get: function() {
-        //        return this.prototype.$classes;
-        //    }
-        //})
-        //
-        //CharClass.prototype.$updateClasses();
 
         return CharClass;
     })

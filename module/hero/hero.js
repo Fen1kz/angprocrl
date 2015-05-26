@@ -1,6 +1,6 @@
-angular.module('hero', ['ui.bootstrap','ui.utils','ui.router','ngAnimate']);
+angular.module('hero', ['data']);
 
-angular.module('hero').config(function($stateProvider) {
+angular.module('hero').config(function() {
 
     /* Add New States Above */
 

@@ -1,27 +1,86 @@
 describe('CharClassTEST', function() {
 
-  beforeEach(module('AndProcRLData'));
+  beforeEach(module('data'));
 
-  it('CharClassBase should be valid', inject(function(CharClassBase) {
-      var char1 = new CharClassBase('char1');
-      expect(char1.name).toEqual('char1');
-      expect( function(){ new CharClassBase() } ).toThrow(new Error('[name] is undefined'));
-  }));
+    it('CharClass be valid', inject(function(CharClass) {
+        var char1 = new CharClass('char1');
+        var char2 = new CharClass('char2');
+        expect(char1.id).toBeDefined();
+        expect(char1.name).toEqual('char1');
+        expect(char1.id).not.toEqual(char2.id);
+        expect(char2.name).toEqual('char2');
+        var charChain = new CharClass('charChain');
+        expect(charChain).toEqual(charChain.addById());
+        expect(charChain).toEqual(charChain.addByName());
+    }));
 
-  it('charClassSet should be valid', inject(function(CharClassBase, charClassSet) {
+    it('CharClass should have attributes', inject(function(CharClass) {
+        var char1 = new CharClass('char1');
+        var char2 = new CharClass('char2')
+            .addById(char1.id);
+        expect(char1.attributes()).toBeDefined();
+        expect(char1.attributes().STR.value()).toEqual(0);
+        char1.attributes(1,2,3,4,5,6,7,8);
+        expect(char1.attributes().STR.value()).toEqual(1);
+        expect(char2.attributes().STR.value()).toEqual(1);
+        char2.attributes(1,2,3,4,5,6,7,8);
+        expect(char1.attributes().STR.value()).toEqual(1);
+        expect(char2.attributes().STR.value()).toEqual(2);
+    }));
+
+  it('charClassSet should be valid', inject(function(CharClass, charClassSet) {
       // initially empty:
       expect(charClassSet.$data).toEqual({});
 
-      // flushing
-      charClassSet.$data.test = 123;
+      expect(charClassSet.byId(null)).toBeUndefined();
+
+      var char1 = new CharClass('char1');
+      var char2 = new CharClass('char2');
+
+      charClassSet.addClass(char1);
+      charClassSet.addClass(char2);
+      expect(charClassSet.byId(char1.id)).toEqual(char1);
+      expect(charClassSet.byId(char2.id)).toEqual(char2);
+      expect(charClassSet.byName('char1')).toEqual(char1);
+      expect(charClassSet.byName('char2')).toEqual(char2);
+
+      char1.name = 'newChar1';
+      char2.name = 'newChar2';
+      expect(charClassSet.byName('char1')).toBeUndefined();
+      expect(charClassSet.byName('char2')).toBeUndefined();
+      expect(charClassSet.byName('newChar1')).toEqual(char1);
+      expect(charClassSet.byName('newChar2')).toEqual(char2);
+      expect(charClassSet.byId(char1.id).name).toEqual('newChar1');
+      expect(charClassSet.byId(char2.id).name).toEqual('newChar2');
+
       charClassSet.flush();
 
+      expect(charClassSet.$data).toEqual({});
+      expect(charClassSet.byId(char1.id)).toBeUndefined();
+      expect(charClassSet.byName('char2')).toBeUndefined();
+      expect(charClassSet.byName('newChar2')).toBeUndefined();
+  }));
+
+  it('CharClass should operate charClassSet', inject(function(charClassSet, CharClass) {
+      // initially empty:
+      expect(charClassSet.$data).toEqual({});
+
       // can add class
-      var char1 = new CharClassBase('char1');
-      charClassSet.addClass(char1);
-      expect(_.keys(charClassSet.$data).length).toEqual(1);
-      expect(charClassSet.id(char1.id)).toEqual(char1);
-      expect(charClassSet.id(null)).toBeUndefined();
+      var char1 = new CharClass('char1').addById();
+      var child1 = new CharClass('child1').addById(char1.id);
+      var child2 = new CharClass('child2').addByName('char1');
+
+      expect(_.keys(charClassSet.$data).length).toEqual(3);
+      expect(charClassSet.byId(child1.id)).toEqual(child1);
+      expect(charClassSet.byId(child2.id)).toEqual(child2);
+      expect(charClassSet.byId(char1.id).name).toEqual('char1');
+      expect(charClassSet.byId(child1.id).name).toEqual('child1');
+      expect(charClassSet.byId(child2.id).name).toEqual('child2');
+      expect(charClassSet.byId(child1.id).parentID).toEqual(char1.id);
+      expect(charClassSet.byId(child2.id).parentID).toEqual(char1.id);
+      expect(charClassSet.byId(char1.id)).not.toEqual(child1);
+      expect(charClassSet.byId(char1.id)).not.toEqual(child2);
+      expect(charClassSet.byId(child1.id)).not.toEqual(child2);
   }));
 
 });
