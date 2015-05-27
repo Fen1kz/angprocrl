@@ -5,7 +5,7 @@ angular.module('stats')
         _.forIn(ATTR, function (attr, attrID) {
             this.$data[attrID] = new Attribute(attrID)
         }, this);
-        this.$apply(arguments);
+        this.fromArray(arguments);
     }
     _.forIn(ATTR, function (attr, attrID) {
         Object.defineProperty(AttributeSet.prototype, attrID, {
@@ -16,17 +16,44 @@ angular.module('stats')
     });
 
     _.assign(AttributeSet.prototype, {
-        $apply: function(args) {
+        toArray: function() {
+            return _.reduce(this.$data, function(memo, attr){
+                memo.push(attr.value());
+                return memo;
+            }, []);
+        }
+        ,toString: function() {
+            return "AttributeSet: " + this.toArray().toString();
+        }
+        ,$iterate: function(callback) {
             var i = 0;
-            _.forIn(ATTR, function (attr, attrID) {
-                this.$data[attrID] = new Attribute(attrID)
-                this.$data[attrID].value(args[i] || 0);
+            _.forIn(this.$data, function (attr, attrID) {
+                callback.call(this, attr, attrID, i)
                 ++i;
             }, this);
-        },
-        $linkToChild: function($childAttributes) {
-            _.each(this.$data, function(attr) {
-
+            return this;
+        }
+        ,fromArray: function(args) {
+            this.$iterate(function(attr, attrID, i){
+                this.$data[attrID].value(args[i] || 0);
+            });
+            return this;
+        }
+        ,applyArray: function(args) {
+            this.$iterate(function(attr, attrID, i){
+                if (args[i] !== void 0) this.$data[attrID].value(args[i]);
+            });
+            return this;
+        }
+        ,$linkChild: function(childAttributeSet) {
+            _.each(this.$data, function(attr, attrID) {
+                attr.$linkChild(childAttributeSet.$data[attrID]);
+            });
+            return this;
+        }
+        ,$unlinkChild: function(childAttributeSet) {
+            _.each(this.$data, function(attr, attrID) {
+                attr.$unlinkChild(childAttributeSet.$data[attrID]);
             });
             return this;
         }

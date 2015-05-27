@@ -20,18 +20,6 @@ angular.module('data')
         };
         return set;
     })
-    //.factory('CharClassAttributeSet', function(AttributeSet) {
-    //    function CharClassAttributeSet() {
-    //        AttributeSet.apply(this, arguments);
-    //        this.$childAttributes = [];
-    //    }
-    //
-    //    return _.inherit(AttributeSet, CharClassAttributeSet, {
-    //        $linkToChild: function($childAttributes) {
-    //            this.$childAttributes.push($childAttributes);
-    //        }
-    //    });
-    //})
     .factory('CharClass', function (charClassSet, AttributeSet) {
         function CharClass(name) {
             if (!name) throw new Error('[name] is undefined', 'CharClassException');
@@ -47,7 +35,7 @@ angular.module('data')
                 if (arguments.length === 0) {
                     return this.$attributes;
                 } else {
-                    this.$attributes.$apply(arguments);
+                    this.$attributes.fromArray(arguments);
                     return this;
                 }
                 throw new Error("CharClass::attributes error");
@@ -56,7 +44,7 @@ angular.module('data')
                 var parent = charClassSet.byId(parentID);
                 if (parentID && !parent) throw new Error('Parent doesn\'t exist', 'CharClassException');
                 charClassSet.addClass(this);
-                if (parent) this.$linkToParent(parent);
+                if (parent) parent.$linkChild(this);
                 return this;
             }
             ,addByName: function (parentName) {
@@ -74,9 +62,14 @@ angular.module('data')
             ,children: function() {
                 return _.filter(charClassSet.$data, 'parentID', this.id);
             }
-            ,$linkToParent: function(parent) {
-                this.parentID = parent;
-                parent.attributes().$linkToChild(this.$attributes);
+            ,$linkChild: function(child) {
+                child.parentID = this.id;
+                this.attributes().$linkChild(child.attributes());
+                return this;
+            }
+            ,$unlinkChild: function(parent) {
+                child.parentID = undefined;
+                this.attributes().$unlinkChild(child.attributes());
                 return this;
             }
         });

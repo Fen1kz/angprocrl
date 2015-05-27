@@ -69,5 +69,4 @@ describe('Attributes TEST', function () {
         expect(STR41.value()).toEqual(3);
         expect(STR42.value()).toEqual(3);
     }));
-
 });
