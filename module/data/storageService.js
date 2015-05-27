@@ -2,19 +2,6 @@ angular.module('data').factory('storageService',function() {
 	var storageService = {
         get data() {
             var data = {};
-            data.attributes = _.map([
-                {id: 'STR', color:'#F00', value:1},
-                {id: 'AGI', color:'#0F0', value:1},
-                {id: 'VIT', color:'#0FF', value:1},
-                {id: 'CON', color:'#080', value:1},
-                {id: 'LUK', color:'#A0A', value:1},
-                {id: 'SPD', color:'#000', value:1},
-                {id: 'INT', color:'#00F', value:1},
-                {id: 'WIZ', color:'#F90', value:1}
-            ], function (e, id) {
-                if (!e.gfx) e.gfx = {};
-                return e;
-            });
             data.traits = _.map([
                 {id: 'HP',    formula: 'VIT * 4 + STR * 2'},
                 {id: 'MP',    formula: 'WIZ * 4 + CON * 2'},
