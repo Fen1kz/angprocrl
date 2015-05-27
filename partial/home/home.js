@@ -18,31 +18,20 @@ angular.module('AndProcRLData')
     //
 
 
-        var attributes1 = new AttributeSet(1, 2, 3);
-        var attributes2 = new AttributeSet(4, 4, 4);
-        var traits = new TraitSet();
-        traits
-            .addTrait(new Trait({
-                name: 'HP',
-                formula: 'STR'
-            }));
+        charClassService.import([
+            {name: 'Adventurer'}
+            ,{name: 'Fighter', parent: 'Adventurer'}
+            ,{name: 'Wizard', parent: 'Adventurer'}
+        ]);
 
-        traits
-            .attributeSet(attributes1)
-            //.addTrait(new Trait({
-            //    name: 'ATK',
-            //    formula: '(STR + AGI + VIT) / 2'
-            //}));
-
-        //expect(traits.byName('HP').value()).toEqual(1);
+        adventurer = charClassService.$.byName('Adventurer');
+        fighter = charClassService.$.byName('Fighter');
+        hero = new Hero();
+        adventurer.attributes(1,2,3);
+        fighter.attributes(1,2,3);
+        hero.attributes(1,2,3,1,1,1,1,1);
 
 
-        debugger;
-
-        //STR1 = Attribute.STR.new();
-        //STR2 = Attribute.STR.new();
-        //STR3 = Attribute.STR.new();
-        //STR1.$linkChild(STR2);
-        //STR2.$linkChild(STR3);
+        //debugger;
 
     });

@@ -35,26 +35,29 @@ angular.module('data')
                 if (arguments.length === 0) {
                     return this.$attributes;
                 } else {
-                    this.$attributes.fromArray(arguments);
+                    this.$attributes.applyArray(arguments);
                     return this;
                 }
                 throw new Error("CharClass::attributes error");
             }
-            ,addById: function (parentID) {
-                var parent = charClassSet.byId(parentID);
-                if (parentID && !parent) throw new Error('Parent doesn\'t exist', 'CharClassException');
-                charClassSet.addClass(this);
-                if (parent) parent.$linkChild(this);
-                return this;
-            }
             ,addByName: function (parentName) {
                 if (parentName) {
                     var parent = charClassSet.byName(parentName);
-                    if (!parent) throw new Error('Parent doesn\'t exist', 'CharClassException');
+                    if (!parent) throw new Error('CharClass::addByName: Parent('+parentName+') doesn\'t exist');
                     return this.addById(parent.id);
                 } else {
                     return this.addById(parentName);
                 }
+            }
+            ,addChild: function (childCharClass) {
+                return childCharClass.addById(this.id);
+            }
+            ,addById: function (parentID) {
+                var parent = charClassSet.byId(parentID);
+                if (parentID && !parent) throw new Error('CharClass::addById: Parent('+parentID+') doesn\'t exist');
+                charClassSet.addClass(this);
+                if (parent) parent.$linkChild(this);
+                return this;
             }
             ,parent: function() {
                 return charClassSet.byId(this.parentID);

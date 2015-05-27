@@ -25,6 +25,9 @@ angular.module('stats')
         ,toString: function() {
             return "AttributeSet: " + this.toArray().toString();
         }
+        ,byName: function(name) {
+            return this[name];
+        }
         ,$iterate: function(callback) {
             var i = 0;
             _.forIn(this.$data, function (attr, attrID) {

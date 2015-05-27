@@ -38,35 +38,36 @@ describe('hero TEST', function () {
         expect(hero3.attributes().WIZ.value()).toEqual(0);
     }));
 
-    //it('should have traits', inject(function(Hero, CLASS) {
-    //    var hero1 = new Hero();
-    //    var hero2 = new Hero()
-    //        .attributes(2,3,4,5,
-    //        6,7,8,9);
-    //    var hero3 = new Hero()
-    //        .attributes(1,3,4,5);
-    //
-    //    expect(hero1.attributes().STR).toEqual(0);
-    //    expect(hero2.attributes().STR).toEqual(2);
-    //    expect(hero2.attributes().WIZ).toEqual(9);
-    //    expect(hero3.attributes().STR).toEqual(1);
-    //    expect(hero3.attributes().WIZ).toEqual(0);
-    //
-    //    //    .class(Adventurer)
-    //    //    .attributes(0,0,0,0,0,0,0)
-    //    //    .equip(nwe Weapon(1d6))
-    //    //.strike(hero1)
-    //
-    //    //strike = function(target){
-    //    //    this.atk = this.getTrait(TRAITS.ATK);
-    //    //}
-    //    //
-    //    //hero.getTrait(traitID){
-    //    //
-    //    //}
-    //
-    //    //expect(hero.doSomething()).toEqual('something');
-    //
-    //}));
+    it('should have traits', inject(function(Hero) {
+        var hero = new Hero()
+            .attributes(2,3,4,5,6,7,8,9);
+
+        expect(hero.traits().byName('ATK').value()).toBeGreaterThan(2);
+    }));
+
+    it('should have class attributes', inject(function(Hero, charClassService) {
+        var adventurer = charClassService.$.byName('Adventurer');
+        var fighter = charClassService.$.byName('Fighter');
+        var hero = new Hero();
+        adventurer.attributes(1,2,3);
+        fighter.attributes(1,2,3);
+        hero.attributes(1,2,3,1,1,1,1,1);
+
+        expect(hero.attributes().byName('STR').value()).toBe(2);
+        expect(hero.attributes().byName('AGI').value()).toBe(4);
+        expect(hero.attributes().byName('VIT').value()).toBe(6);
+
+        hero.class('Fighter');
+
+        expect(hero.attributes().byName('STR').value()).toBe(3);
+        expect(hero.attributes().byName('AGI').value()).toBe(6);
+        expect(hero.attributes().byName('VIT').value()).toBe(9);
+    }));
+
+    it('should be able to equip weapons', inject(function(Hero) {
+        var hero = new Hero();
+        hero.equip(new Sword(3));
+        hero.attack(hero);
+    }));
 
 });

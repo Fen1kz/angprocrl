@@ -19,14 +19,14 @@ describe('CharClassTEST', function() {
             .addById();
         var char2 = new CharClass('char2')
             .addById(char1.id);
+        var char3 = char2.addChild(new CharClass('char3'));
         expect(char1.attributes()).toBeDefined();
-        expect(char1.attributes().STR.value()).toEqual(0);
         char1.attributes(1,2,3,4,5,6,7,8);
-        expect(char1.attributes().STR.value()).toEqual(1);
-        expect(char2.attributes().STR.value()).toEqual(1);
         char2.attributes(1,2,3,4,5,6,7,8);
+        char3.attributes(1,2,3,4,5,6,7,8);
         expect(char1.attributes().STR.value()).toEqual(1);
         expect(char2.attributes().STR.value()).toEqual(2);
+        expect(char3.attributes().STR.value()).toEqual(3);
     }));
 
   it('charClassSet should be valid', inject(function(CharClass, charClassSet) {

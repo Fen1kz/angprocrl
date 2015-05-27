@@ -1,8 +1,10 @@
-angular.module('hero').factory('Hero',function(charClassService, CharClass, AttributeSet) {
+angular.module('hero').factory('Hero',function(charClassService, CharClass, AttributeSet, TraitSet) {
     function Hero() {
         this.guid = _.uniqueId('hero_');
         this.$attributes = new AttributeSet();
         this.class('Adventurer');
+        this.$traitSet = new TraitSet()
+            .attributeSet(this.$attributes);
     }
 
     _.assign(Hero.prototype, {
@@ -34,6 +36,9 @@ angular.module('hero').factory('Hero',function(charClassService, CharClass, Attr
                 return this;
             }
             throw new Error("Hero::attributes error");
+        }
+        ,traits: function() {
+            return this.$traitSet;
         }
     });
 
