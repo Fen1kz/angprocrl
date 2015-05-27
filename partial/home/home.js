@@ -1,6 +1,6 @@
 angular.module('AndProcRLData')
     //.controller('HomeCtrl', function ($scope, ClassAttribute, Attribute, dataService, charClassService, attributeService) {
-    .controller('HomeCtrl', function ($scope, Hero, Attribute, AttributeSet, storageService, CharClass, charClassService) {
+    .controller('HomeCtrl', function ($scope, Hero, Trait, Attribute, AttributeSet, storageService, CharClass, charClassService, TraitSet) {
     //
     //var seeds = [
     //    {name: 'Fighter', parent: 'Adventurer'}
@@ -16,8 +16,28 @@ angular.module('AndProcRLData')
     //    window.child1 = new CharClass('child1').addById(char1.id);
     //    window.child2 = new CharClass('child2').addByName('char1');
     //
-        debugger;
 
+
+        var attributes1 = new AttributeSet(1, 2, 3);
+        var attributes2 = new AttributeSet(4, 4, 4);
+        var traits = new TraitSet();
+        traits
+            .addTrait(new Trait({
+                name: 'HP',
+                formula: 'STR'
+            }));
+
+        traits
+            .attributeSet(attributes1)
+            //.addTrait(new Trait({
+            //    name: 'ATK',
+            //    formula: '(STR + AGI + VIT) / 2'
+            //}));
+
+        //expect(traits.byName('HP').value()).toEqual(1);
+
+
+        debugger;
 
         //STR1 = Attribute.STR.new();
         //STR2 = Attribute.STR.new();
