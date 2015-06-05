@@ -1,8 +1,8 @@
 angular.module('hero').factory('Hero',function(charClassService, CharClass, AttributeSet, TraitSet) {
-    function Hero() {
+    function Hero(charClass) {
         this.guid = _.uniqueId('hero_');
         this.$attributes = new AttributeSet();
-        this.class('Adventurer');
+        this.class(charClass || 'Adventurer');
         this.$traitSet = new TraitSet()
             .attributeSet(this.$attributes);
 
@@ -18,7 +18,10 @@ angular.module('hero').factory('Hero',function(charClassService, CharClass, Attr
                 return this.$hp;
             }
             this.$hp += change;
-            if (this.$hp > this.maxHp()) this.$hp = this.maxHp();
+            this.$hp =
+                this.$hp > this.maxHp() ? this.maxHp() :
+                this.$hp < 0 ? 0 :
+                this.$hp;
             return this.$hp;
         }
         ,class: function(newClass) {
