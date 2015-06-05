@@ -19,7 +19,7 @@ angular.module('AndProcRLData')
     })
 .directive('characterClass', function($rootScope, $window,
                                       $document, $timeout, $compile,
-                                      dataService, charClassService,
+                                      dataService, CCService,
                                       $modal, $templateCache, $templateRequest, characterClass_compiled) {
 	return {
 		restrict: 'E',
@@ -45,7 +45,7 @@ angular.module('AndProcRLData')
              */
 
             $scope.compileChildren = function() {
-                if (charClassService.getClassesIndexes($scope.model.id).length > 0) {
+                if (CCService.getClassesIndexes($scope.model.id).length > 0) {
                     characterClass_compiled.templateFn($scope, function (cloned, scope) {
                         $e.append(cloned);
                     });
@@ -61,7 +61,7 @@ angular.module('AndProcRLData')
              */
 
             $scope.$watch('model.parent', function(newValue, oldValue) {
-                $scope.parent = charClassService.findClassById($scope.model.parent);
+                $scope.parent = CCService.findClassById($scope.model.parent);
             });
             $scope.$watch('model.id', function(newValue, oldValue) {
                 _.each($scope.classes, function(e){
@@ -120,12 +120,12 @@ angular.module('AndProcRLData')
              */
 
             $scope.add = function(){
-                charClassService.addClass($scope.model);
+                CCService.addClass($scope.model);
             };
 
             $scope.remove = function(){
                 if (!$window.confirm('rly?')) return; // jshint ignore:line
-                charClassService.removeClass($scope.model);
+                CCService.removeClass($scope.model);
             };
 
             $scope.edit = function($event) {

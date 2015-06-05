@@ -1,5 +1,5 @@
 angular.module('data')
-.service('charClassService', function ($rootScope, $window, dataService,
+.service('CCService', function ($rootScope, $window, dataService,
                                        charClassSet, CharClass) {
     var recursiveImport = function(seed) {
     };
@@ -25,7 +25,7 @@ angular.module('data')
                     return true;
                 }, this);
             }
-            if (seeds.length > 0) throw new Error("Invalid seed, not all matched", "charClassService");
+            if (seeds.length > 0) throw new Error("Invalid seed, not all matched", "CCService");
 
             service.update();
         }
@@ -41,6 +41,6 @@ angular.module('data')
     };
 
     //service.start();
-    window.charClassService = service;
+    window.CCService = service;
     return service;
 });

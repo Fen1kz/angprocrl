@@ -1,12 +1,12 @@
-angular.module('AndProcRLData').controller('ClassesCtrl',function($scope, charClassService){
-    $scope.childClassesIndexes = charClassService.getClassesIndexes(undefined);
-    $scope.charClassService = charClassService;
+angular.module('AndProcRLData').controller('ClassesCtrl',function($scope, CCService){
+    $scope.childClassesIndexes = CCService.getClassesIndexes(undefined);
+    $scope.CCService = CCService;
 
     $scope.isParentUndefined = function(item) {
         return item.parent === void 0;
     };
 
     $scope.flush = function () {
-        charClassService.flush();
+        CCService.flush();
     };
 });

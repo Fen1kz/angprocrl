@@ -1,11 +1,11 @@
 angular.module('AndProcRLData')
-.controller('DebugDisplayCtrl',function($scope, dataService, charClassService) {
+.controller('DebugDisplayCtrl',function($scope, dataService, CCService) {
         $scope.data = dataService.data;
     //$scope.services = {
     //    dataService: dataService
-    //    ,charClassService:charClassService
+    //    ,CCService:CCService
     //};
-    //    $scope.selectedService = $scope.services.charClassService;
+    //    $scope.selectedService = $scope.services.CCService;
     //    $scope.selectService = function(service) {
     //        $scope.selectedService = service;
     //    };

@@ -1,10 +1,10 @@
 <div class="col-md-12" ng-controller="ClassesCtrl">
     <div class="character-class-container" id="character-class-container">
         <character-class
-            ng-repeat="model in filteredClasses = (charClassService.data | filter: isParentUndefined)"
+            ng-repeat="model in filteredClasses = (CCService.data | filter: isParentUndefined)"
             model="model"
             siblings="filteredClasses.length"
-            classes="charClassService.data"
+            classes="CCService.data"
             />
     </div>
 </div>

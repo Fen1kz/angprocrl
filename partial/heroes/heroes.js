@@ -1,5 +1,5 @@
 angular.module('AndProcRLData').controller('HeroesCtrl',function($scope){
-    $scope.classes = charClassService.data;
+    $scope.classes = CCService.data;
     $scope.attributes = dataService.data.attributes;
     $scope.traits = dataService.data.traits;
 

@@ -1,4 +1,4 @@
-angular.module('hero').factory('Hero',function(charClassService, CharClass, AttributeSet, TraitSet) {
+angular.module('hero').factory('Hero',function(CCService, CharClass, AttributeSet, TraitSet) {
     function Hero(charClass) {
         this.guid = _.uniqueId('hero_');
         this.$attributes = new AttributeSet();
@@ -31,7 +31,7 @@ angular.module('hero').factory('Hero',function(charClassService, CharClass, Attr
                 this.$setClass(newClass);
                 return this;
             } else if (typeof newClass === 'string') {
-                var _class = charClassService.$.byName(newClass);
+                var _class = CCService.$.byName(newClass);
                 if (!_class) throw new Error("Hero::class(byName) error.");
                 this.class(_class);
                 return this;
