@@ -5,6 +5,9 @@ angular.module('data')
     };
     var service = {
         $: charClassSet
+        ,get data () {
+            return this.$.$data;
+        }
         ,start: function() {
             this.import(dataService.data.seeds_classes);
         }

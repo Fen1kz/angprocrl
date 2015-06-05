@@ -1,22 +1,22 @@
 angular.module('AndProcRLData')
-    .service('characterClass_compiled', function($q, $compile, $templateRequest, $templateCache) {
-        var templateFnDefer = $q.defer();
+.service('characterClass_compiled', function($q, $compile, $templateRequest, $templateCache) {
+    var templateFnDefer = $q.defer();
 
-        var characterClass_compiled = {
-            templateFn: null,
-            templateFnPromise: templateFnDefer.promise,
-            popoverFn: $compile('<div>{{model.id}}</div>')
-        };
+    var characterClass_compiled = {
+        templateFn: null,
+        templateFnPromise: templateFnDefer.promise,
+        popoverFn: $compile('<div>{{model.id}}</div>')
+    };
 
-        $templateRequest('directive/character-class/character-class-children.html')
-            .then(function () {
-                var template = $templateCache.get('directive/character-class/character-class-children.html');
-                characterClass_compiled.templateFn = $compile(template);
-                templateFnDefer.resolve();
-            });
+    $templateRequest('directive/character-class/character-class-children.html')
+        .then(function () {
+            var template = $templateCache.get('directive/character-class/character-class-children.html');
+            characterClass_compiled.templateFn = $compile(template);
+            templateFnDefer.resolve();
+        });
 
-        return characterClass_compiled;
-    })
+    return characterClass_compiled;
+})
 .directive('characterClass', function($rootScope, $window,
                                       $document, $timeout, $compile,
                                       dataService, CCService,
@@ -26,8 +26,8 @@ angular.module('AndProcRLData')
 		replace: true,
 		scope: {
             model: '=',
-            siblings: '=',
-            classes: '='
+            sole: '='
+            //classes: '='
             //index: '='
 		},
 		templateUrl: 'directive/character-class/character-class.html',
@@ -36,52 +36,42 @@ angular.module('AndProcRLData')
             ===== Initial Scope Setup =====
             */
 
-            $scope.parentFilter = function(item) {
-                return item.parent === $scope.model.id;
-            };
+            $scope.siblings = $scope.model.children();
 
             /*
              ===== Compiling Children Leafs =====
              */
 
             $scope.compileChildren = function() {
-                if (CCService.getClassesIndexes($scope.model.id).length > 0) {
+                if ($scope.siblings.length > 0) {
                     characterClass_compiled.templateFn($scope, function (cloned, scope) {
                         $e.append(cloned);
                     });
                 }
             };
             characterClass_compiled.templateFnPromise
-                    .then(function () {
-                        $scope.compileChildren();
-                    });
+                .then(function () {
+                    $scope.compileChildren();
+                });
+
 
             /*
              ===== Setup Watchers =====
              */
 
-            $scope.$watch('model.parent', function(newValue, oldValue) {
-                $scope.parent = CCService.findClassById($scope.model.parent);
-            });
-            $scope.$watch('model.id', function(newValue, oldValue) {
-                _.each($scope.classes, function(e){
-                    if (e.parent === oldValue) {
-                        e.parent = newValue;
-                    }
-                });
-            });
-            $scope.$watch('parent.attributes', function(newValue) {
-                if ($scope.parent) {
-                    _.each($scope.model.attributes, function (attr, i) {
-                        $scope.model.attributes[i].base = 0 + (+newValue[i].base || 0) + (+newValue[i].value || 0);
-                    });
-                }
-            }, true);
-            $scope.$watch('model.attributes', function(newAttributes) {
-                $scope._attributes_diff = _.reduce(newAttributes, function(memo, attr){
-                    return memo + (+attr.value || 0);
-                }, 0);
-            }, true);
+            //$scope.$watch('parent.attributes', function(newValue) {
+            //    if ($scope.model.parentID) {
+            //        _.each($scope.model.attributes, function (attr, i) {
+            //            $scope.model.attributes[i].base = 0 + (+newValue[i].base || 0) + (+newValue[i].value || 0);
+            //        });
+            //    }
+            //}, true);
+
+            //$scope.$watch('model.attributes', function(newAttributes) {
+            //    $scope._attributes_diff = _.reduce(newAttributes, function(memo, attr){
+            //        return memo + (+attr.value || 0);
+            //    }, 0);
+            //}, true);
 
             /*
              ===== Setup popover =====
@@ -98,11 +88,9 @@ angular.module('AndProcRLData')
              ===== Setup Events =====
              */
 
-            $scope.$on('classes:update', function(event, $id){
-                if ($scope.$id !== $id) {
-                    if ($e.find('.character-class-children').length === 0) {
-                        $scope.compileChildren();
-                    }
+            $scope.$on('classes:update', function(event){
+                if ($e.find('.character-class-children').length === 0) {
+                    $scope.compileChildren();
                 }
             });
 
@@ -146,7 +134,7 @@ angular.module('AndProcRLData')
                     controller: 'ModalClassEditCtrl'
                 });
 
-                modalInstance.result.then(function(){
+                modalInstance.result.then(function() {
                     console.log('closed');
                 },function(){
                     //$(".modal").modal("hide");
@@ -176,8 +164,8 @@ angular.module('AndProcRLData')
         };
         findParentClasses(roots);
 
-        $scope.$watch('model.parent', function(){
-            $rootScope.$broadcast('classes:update');
+        $scope.$watch('model.parentID', function(){
+            CCService.update();
         });
 
         /*

@@ -2,7 +2,7 @@ describe('ClassesCtrl', function() {
 
 	beforeEach(module('AndProcRLData'));
 
-	var scope,ctrl;
+	var scope, ctrl;
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();

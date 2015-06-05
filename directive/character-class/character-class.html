@@ -1,7 +1,4 @@
-    <div class="character-class" ng-class="{'sole' : siblings == 1}" data-character-class="{{model.id}}">
-        <!--
-            ns-popover-group="character-class"
-        -->
+    <div class="character-class" ng-class="{'sole' : sole}" data-character-class="{{model.id}}">
         <div
             class="element"
             data-character-class="{{model.id}}"
@@ -12,11 +9,7 @@
             ns-popover-placement="left|top"
             ns-popover-timeout="0.2"
             >
-            <!--{{popover_pin}}-->
-            <!-- [data-character-class] for drag & drop -->
-            <span class="name">{{model.id}}</span> <span class="attrs">({{_attributes_diff}})</span>
+            <span class="name">{{model.name}}</span> <span class="attrs">({{_attributes_diff}})</span>
         </div>
-        <!--<div class="character-class-children">-->
-             <!--character-class-children.html -->
-        <!--</div>-->
+         <!--character-class-children.html -->
     </div>

@@ -1,9 +1,8 @@
-angular.module('AndProcRLData').controller('ClassesCtrl',function($scope, CCService){
+angular.module('AndProcRLData').controller('ClassesCtrl',function($scope, CCService) {
     $scope.CCService = CCService;
-
-    $scope.isParentUndefined = function(item) {
-        return item.parent === void 0;
-    };
+    $scope.filteredClasses = _.filter(CCService.data, function(model) {
+        return model.parentID === void 0;
+    });
 
     $scope.flush = function () {
         CCService.flush();
