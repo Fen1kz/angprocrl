@@ -1,5 +1,4 @@
 angular.module('AndProcRLData').controller('ClassesCtrl',function($scope, CCService){
-    $scope.childClassesIndexes = CCService.getClassesIndexes(undefined);
     $scope.CCService = CCService;
 
     $scope.isParentUndefined = function(item) {

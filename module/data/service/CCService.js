@@ -40,7 +40,7 @@ angular.module('data')
         }
     };
 
-    //service.start();
+    service.start();
     window.CCService = service;
     return service;
 });
