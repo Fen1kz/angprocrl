@@ -64,9 +64,19 @@ describe('hero TEST', function () {
         expect(hero.attributes().byName('VIT').value()).toBe(9);
     }));
 
-    it('should have hp', inject(function(Hero) {
+    it('should have hp', inject(function(Hero, charClassService) {
+        var fighter = charClassService.$.byName('Fighter');
+        fighter.attributes().STR = 15;
+
         var hero = new Hero();
+        expect(hero.maxHp()).toEqual(0);
         expect(hero.hp()).toEqual(0);
+        expect(hero.hp(+5)).toEqual(0);
+        expect(hero.hp(-3)).toEqual(0);
+
+        hero.traits('hp').formula('STR');
+        hero.class(fighter);
+        expect(hero.maxHp()).toEqual(15);
     }));
 
     //it('should be able to equip weapons', inject(function(Hero) {

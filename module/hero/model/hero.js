@@ -6,15 +6,19 @@ angular.module('hero').factory('Hero',function(charClassService, CharClass, Attr
         this.$traitSet = new TraitSet()
             .attributeSet(this.$attributes);
 
-        this.$hp = this.traits('hp');
+        this.$hp = this.traits('hp').value();
     }
 
     _.assign(Hero.prototype, {
-        hp: function(change) {
+        maxHp: function() {
+            return this.traits('hp').value();
+        }
+        ,hp: function(change) {
             if (change === void 0) {
-                return this.$hp.value()
+                return this.$hp;
             }
             this.$hp += change;
+            if (this.$hp > this.maxHp()) this.$hp = this.maxHp();
             return this.$hp;
         }
         ,class: function(newClass) {
