@@ -35,8 +35,13 @@ angular.module('stats')
         byId: function(id){
             return this.$data[id];
         }
+        ,$byName: function(name) {
+            return _.find(this.$data, 'name', name.toLowerCase());
+        }
         ,byName: function(name) {
-            return _.find(this.$data, 'name', name);
+            var trait = this.$byName(name);
+            if (trait) return trait;
+            throw new Error("TraitSet::byName: Can not find trait with name: " + name);
         }
         ,attributeSet: function(attributeSet) {
             if (attributeSet === void 0) {
@@ -50,7 +55,7 @@ angular.module('stats')
             }
         }
         ,addTrait: function(trait) {
-            if (this.byName(trait.name)) throw new Error("TraitSet::duplicate");
+            if (this.$byName(trait.name)) throw new Error("TraitSet::duplicate");
             trait.$traitSet = this;
             this.$data[trait.id] = trait;
             if (this.$attributeSet) trait.refreshFormula();

@@ -5,10 +5,19 @@ angular.module('hero').factory('Hero',function(charClassService, CharClass, Attr
         this.class('Adventurer');
         this.$traitSet = new TraitSet()
             .attributeSet(this.$attributes);
+
+        this.$hp = this.traits('hp');
     }
 
     _.assign(Hero.prototype, {
-        class: function(newClass) {
+        hp: function(change) {
+            if (change === void 0) {
+                return this.$hp.value()
+            }
+            this.$hp += change;
+            return this.$hp;
+        }
+        ,class: function(newClass) {
             if (newClass == void 0) {
                 return this.$class;
             } else if (newClass instanceof CharClass) {
@@ -37,8 +46,12 @@ angular.module('hero').factory('Hero',function(charClassService, CharClass, Attr
             }
             throw new Error("Hero::attributes error");
         }
-        ,traits: function() {
-            return this.$traitSet;
+        ,traits: function(name) {
+            if (name === void 0) {
+                return this.$traitSet;
+            } else {
+                return this.$traitSet.byName(name);
+            }
         }
     });
 

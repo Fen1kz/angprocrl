@@ -2,11 +2,11 @@ angular.module('stats')
 .factory('Trait',function(ATTR_DATA) {
 	function Trait(config) {
         config = _.defaults(config || {}, {
-            name: 'Trait',
+            name: 'trait',
             formula: void 0,
             index: 0
         });
-        this.name = config.name;
+        this.name = config.name.toLowerCase();
         this.$formula = config.formula;
         this.$index = config.index;
 

@@ -64,10 +64,15 @@ describe('hero TEST', function () {
         expect(hero.attributes().byName('VIT').value()).toBe(9);
     }));
 
-    it('should be able to equip weapons', inject(function(Hero) {
+    it('should have hp', inject(function(Hero) {
         var hero = new Hero();
-        hero.equip(new Sword(3));
-        hero.attack(hero);
+        expect(hero.hp()).toEqual(0);
     }));
+
+    //it('should be able to equip weapons', inject(function(Hero) {
+    //    var hero = new Hero();
+    //    hero.equip(new Sword(3));
+    //    hero.attack(hero);
+    //}));
 
 });
