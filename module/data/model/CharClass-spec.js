@@ -68,15 +68,18 @@ describe('CharClassTEST', function() {
       var char1 = new CharClass('char1').addById();
       var child1 = new CharClass('child1').addById(char1.id);
       var child2 = new CharClass('child2').addByName('char1');
+      var child3 = CharClass.add('child3', char1.id);
 
-      expect(_.keys(charClassSet.$data).length).toEqual(3);
+      expect(_.keys(charClassSet.$data).length).toEqual(4);
       expect(charClassSet.byId(child1.id)).toEqual(child1);
       expect(charClassSet.byId(child2.id)).toEqual(child2);
+      expect(charClassSet.byId(child3.id)).toEqual(child3);
       expect(charClassSet.byId(char1.id).name).toEqual('char1');
       expect(charClassSet.byId(child1.id).name).toEqual('child1');
       expect(charClassSet.byId(child2.id).name).toEqual('child2');
       expect(charClassSet.byId(child1.id).parentID).toEqual(char1.id);
       expect(charClassSet.byId(child2.id).parentID).toEqual(char1.id);
+      expect(charClassSet.byId(child3.id).parentID).toEqual(char1.id);
       expect(charClassSet.byId(char1.id)).not.toEqual(child1);
       expect(charClassSet.byId(char1.id)).not.toEqual(child2);
       expect(charClassSet.byId(child1.id)).not.toEqual(child2);

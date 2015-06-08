@@ -3,7 +3,7 @@ describe('CCService TEST', function() {
   beforeEach(module('data'));
 
   it('should import classes', inject(function(CCService) {
-      CCService.import([
+      CCService.importData([
           {name: 'Adventurer'}
           ,{name: 'Fighter', parent: 'Adventurer'}
       ]);
@@ -13,7 +13,7 @@ describe('CCService TEST', function() {
   }));
 
     it('should import inverse classes', inject(function(CCService) {
-        CCService.import([
+        CCService.importData([
             {name: 'Fighter', parent: 'Adventurer'}
             ,{name: 'Adventurer'}
         ]);

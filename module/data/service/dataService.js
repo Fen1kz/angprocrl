@@ -19,10 +19,8 @@ angular.module('data').service('dataService', function ($rootScope, storageServi
         , update: function () {
             console.log('data:update');
             $rootScope.$broadcast('data:update');
-            $rootScope.$broadcast('classes:update');
         }
     };
-    dataService.init();
     window.dataService = dataService;
     return dataService;
 });

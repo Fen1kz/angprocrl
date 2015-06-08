@@ -30,6 +30,11 @@ angular.module('data')
             this.$attributes = new AttributeSet();
         }
 
+        CharClass.add = function(name, parentID) {
+            return new CharClass(name)
+                .addById(parentID);
+        }
+
         _.assign(CharClass.prototype, {
             attributes: function() {
                 if (arguments.length === 0) {

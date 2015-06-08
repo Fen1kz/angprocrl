@@ -1,0 +1,57 @@
+Human Novice  vs Human Novice:
+HP 6 6
+ATK 1 1
+DEF 1 1
+HIT 1 1
+EVA 1 1
+SPD 1 1
+ATKSPD 1 1
+WPN 1d3 1d3
+ARM 1
+-----
+Round 1:
+#1 attacks
+#1 WPNroll = 1d3 = 3
+#EVA|HIT = 100%
+#CRIT|BLOCK = FAIL|FAIL
+#DMG = 0
+
+
+EVA 1 : HIT 1 = 100%
+EVA 1 : HIT 2 = 100%
+EVA 4 : HIT 2 = 50%
+EVA 2 : HIT 2 = 100%
+
+CRIT 0   = 0%
+CRIT 1   = 1%
+CRIT 2   = 2%
+CRIT 3   = 3%
+
+DMG = ATK - DEF
+DMG = -10 & WPN=3 & ARM=0 = 1
+DMG = -5  & WPN=3 & ARM=0 = 1
+DMG = -2  & WPN=3 & ARM=0 = 1
+DMG = -1  & WPN=3 & ARM=0 = 2
+DMG = 0   & WPN=3 & ARM=0 = 3
+DMG = 1   & WPN=3 & ARM=0 = 4
+DMG = 2   & WPN=3 & ARM=0 = 5
+DMG = 5   & WPN=3 & ARM=0 = 8
+DMG = 10  & WPN=3 & ARM=0 = 13
+
+
+SIGHT = 4 - 10
+
+P1+P2
+2 > 1
+20 > 10
+
+
+
+
+
+
+
+
+
+
+

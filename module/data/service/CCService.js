@@ -1,4 +1,12 @@
 angular.module('data')
+.run(function(CCService){
+        //console.log('run phase')
+        CCService.importData([
+            {name: 'Fighter', parent: 'Adventurer'}
+            ,{name: 'Adventurer'}
+        ]);
+    //CCService.start();
+})
 .service('CCService', function ($rootScope, $window, dataService,
                                        charClassSet, CharClass) {
     var recursiveImport = function(seed) {
@@ -8,15 +16,19 @@ angular.module('data')
         ,get data () {
             return this.$.$data;
         }
-        ,start: function() {
-            this.import(dataService.data.seeds_classes);
+        , start: function() {
+            this.importData(dataService.data.seeds_classes);
         }
         , flush: function() {
             charClassSet.flush();
         }
-        , import: function(seeds) {
+        , update: function () {
+            console.log('classes:update')
+            $rootScope.$broadcast('classes:update');
+        }
+        , importData: function(seeds) {
             this.flush();
-            console.log('imported')
+            console.debug('imported')
 
             for (var i = 50; i > 0 && seeds.length > 0; --i) {
                 seeds = _.filter(seeds, function (seed){
@@ -32,18 +44,12 @@ angular.module('data')
 
             service.update();
         }
-        , export: function(seedArray) {
+        , exportData: function(seedArray) {
             //_.each(seedArray, function (){
             //
             //})
         }
-        , update: function () {
-            console.log('classes:update')
-            $rootScope.$broadcast('classes:update');
-        }
     };
-
-    service.start();
     window.CCService = service;
     return service;
 });

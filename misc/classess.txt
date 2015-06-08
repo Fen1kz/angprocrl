@@ -1,0 +1,9 @@
+Baron     STR + VIT + CON = HP, BLOCK, DEF | ATK
+Crusader  STR + VIT + INT
+Barbarian STR + SPD + AGI Barb
+Warlord   STR + SPD + CON
+
+Ninja     AGI + LUK + SPD
+Killer    AGI + LUK + STR
+Hunter    AGI + SPD + CON
+Marksman  AGI + SPD + STR Barb

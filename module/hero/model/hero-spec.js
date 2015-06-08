@@ -5,12 +5,9 @@ describe('hero TEST', function () {
     var class12;
     beforeEach(function () {
         inject(function (CharClass) {
-            class1 = new CharClass('class1');
-            class11 = new CharClass('class11');
-            class12 = new CharClass('class12');
-            class1.addById();
-            class1.addChild(class11);
-            class1.addChild(class12);
+            class1 = CharClass.add('class1');
+            class11 = CharClass.add('class11', class1.id);
+            class12 = CharClass.add('class12', class1.id);
         });
     });
     it('should have class!', inject(function (Hero) {
