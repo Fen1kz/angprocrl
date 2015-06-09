@@ -26,7 +26,7 @@ describe('CharClassTEST', function () {
         expect(char3.attributes().STR.value()).toEqual(3);
     }));
 
-    it('charClassSet should be valid', inject(function (CharClass, charClassSet) {
+    it('charClassSet should be valid', inject(function (CharClass) {
         // initially empty:
         expect(charClassSet.$data).toEqual({});
 
