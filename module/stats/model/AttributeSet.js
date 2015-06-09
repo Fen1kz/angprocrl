@@ -48,15 +48,15 @@ angular.module('stats')
             });
             return this;
         }
-        ,$linkTo: function(parentAttributeSet) {
+        ,link: function(parentAttributeSet) {
             _.each(this.$data, function(attr, attrID) {
-                attr.$linkTo(parentAttributeSet.$data[attrID]);
+                attr.link(parentAttributeSet.$data[attrID]);
             });
             return this;
         }
-        ,$unlinkFrom: function(parentAttributeSet) {
+        ,unlink: function(parentAttributeSet) {
             _.each(this.$data, function(attr, attrID) {
-                attr.$unlinkFrom(parentAttributeSet.$data[attrID]);
+                attr.unlink(parentAttributeSet.$data[attrID]);
             });
             return this;
         }

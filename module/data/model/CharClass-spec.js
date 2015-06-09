@@ -8,25 +8,16 @@ describe('CharClassTEST', function () {
         });
     });
 
-    it('CharClass be valid', inject(function (CharClass) {
-        var char1 = new CharClass('char1');
-        var char2 = new CharClass('char2');
-        expect(char1.id).toBeDefined();
-        expect(char1.name).toEqual('char1');
-        expect(char1.id).not.toEqual(char2.id);
-        expect(char2.name).toEqual('char2');
-        var charChain = new CharClass('charChain');
-        expect(charChain).toEqual(charChain.addById());
-        expect(charChain).toEqual(charChain.addByName());
-    }));
-
     it('CharClass should have attributes', inject(function (CharClass) {
-        var char1 = new CharClass('char1')
-            .addById();
+        var char1 = new CharClass('char1');
         var char2 = new CharClass('char2')
-            .addById(char1.id);
-        var char3 = char2.addChild(new CharClass('char3'));
+            .link(char1);
+        var char3 = char2
+            .linkChild(new CharClass('char3'));
         expect(char1.attributes()).toBeDefined();
+        expect(char1).not.toBe(char2);
+        expect(char2).not.toBe(char3);
+        expect(char3).not.toBe(char1);
         char1.attributes(1, 2, 3, 4, 5, 6, 7, 8);
         char2.attributes(1, 2, 3, 4, 5, 6, 7, 8);
         char3.attributes(1, 2, 3, 4, 5, 6, 7, 8);

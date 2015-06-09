@@ -57,13 +57,13 @@ angular.module('stats')
                 }, this);
             }
         }
-        ,$linkTo: function(parentAttribute) {
+        ,link: function(parentAttribute) {
             if (this.$parent) throw new Error('Attribute::$parent exists');
             this.$parent = parentAttribute;
             this.base(parentAttribute.value());
             parentAttribute.$children.push(this);
         }
-        ,$unlinkFrom: function(parentAttribute) {
+        ,unlink: function(parentAttribute) {
             this.$parent = void 0;
             this.base(0);
             _.remove(parentAttribute.$children, 'id', this.id);
