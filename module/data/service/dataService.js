@@ -1,4 +1,10 @@
-angular.module('data').service('dataService', function ($rootScope, storageService) {
+angular.module('data')
+    .run(function(dataService){
+        dataService.init();
+    })
+    .service('dataService', function ($rootScope, storageService) {
+    var DB_VERSION = 'data2';
+
     var dataService = {
         name: 'dataService'
         , data: {}
@@ -7,13 +13,13 @@ angular.module('data').service('dataService', function ($rootScope, storageServi
             dataService.update();
         }
         , load: function () {
-            dataService.data = storageService.load('data', angular.extend({}, storageService.data));
+            dataService.data = storageService.load(DB_VERSION, angular.extend({}, storageService.data));
         }
         , save: function () {
-            storageService.save('data', angular.toJson(dataService.data));
+            storageService.save(DB_VERSION, angular.toJson(dataService.data));
         }
         , flush: function () {
-            storageService.remove('data');
+            storageService.remove(DB_VERSION);
             dataService.init();
         }
         , update: function () {

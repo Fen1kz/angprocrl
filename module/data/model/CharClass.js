@@ -61,7 +61,7 @@ angular.module('data')
                 var parent = charClassSet.byId(parentID);
                 if (parentID && !parent) throw new Error('CharClass::addById: Parent('+parentID+') doesn\'t exist');
                 charClassSet.addClass(this);
-                if (parent) parent.$linkChild(this);
+                if (parent) this.$linkTo(parent);
                 return this;
             }
             ,parent: function() {
@@ -70,14 +70,19 @@ angular.module('data')
             ,children: function() {
                 return _.filter(charClassSet.$data, 'parentID', this.id);
             }
-            ,$linkChild: function(child) {
-                child.parentID = this.id;
-                this.attributes().$linkChild(child.attributes());
+            ,$linkTo: function(parent) {
+                if (typeof parent === 'string') parent = charClassSet.byId(parent);
+                this.$unlinkFrom(parent);
+                if (parent) {
+                    this.parentID = parent.id;
+                    this.attributes().$linkTo(parent.attributes());
+                }
                 return this;
             }
-            ,$unlinkChild: function(parent) {
-                child.parentID = undefined;
-                this.attributes().$unlinkChild(child.attributes());
+            ,$unlinkFrom: function(parent) {
+                if (typeof parent === 'string') parent = charClassSet.byId(parent);
+                this.parentID = undefined;
+                if (parent) this.attributes().$unlinkFrom(parent.attributes());
                 return this;
             }
         });

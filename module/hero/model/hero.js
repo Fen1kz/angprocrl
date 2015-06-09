@@ -40,9 +40,9 @@ angular.module('hero').factory('Hero',function(CCService, CharClass, AttributeSe
         }
         ,$setClass: function(newClass) {
             if (!(newClass instanceof CharClass)) throw new Error("Hero::$setClass error.");
-            if (this.$class) this.$class.attributes().$unlinkChild(this.$attributes);
+            if (this.$class) this.$attributes.$unlinkFrom(this.$class.attributes());
             this.$class = newClass;
-            this.$class.attributes().$linkChild(this.$attributes);
+            this.$attributes.$linkTo(this.$class.attributes());
         }
         ,attributes: function() {
             if (arguments.length === 0) {

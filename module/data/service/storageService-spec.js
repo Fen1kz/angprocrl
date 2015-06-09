@@ -2,7 +2,8 @@ describe('storageService', function() {
 
   beforeEach(module('data'));
 
-  it('should ...', inject(function(storageService) {
+  it('should flush itself', inject(function(storageService) {
+
 
 	//expect(storageService.doSomething()).toEqual('something');
 

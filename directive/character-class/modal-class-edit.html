@@ -19,11 +19,11 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-3 control-label" for="model.parent">Parent</label>
+            <label class="col-md-3 control-label" for="model.parentID">Parent</label>
             <div class="col-md-8">
                 <div class="row form-inline">
-                    <select ng-model='model.parent' id="model.parent" name="model.parent"
-                            ng-options="class as class for class in (parentClasses) track by class"
+                    <select ng-model='model.parentID' id="model.parentID" name="model.parentID"
+                            ng-options="class.id as class.name for class in (parentClasses)"
                             class="form-control input-md"></select>
                     <button class='select-parent' draggable="true"><i class="fa fa-bullseye"></i></button>
                 </div>
@@ -32,7 +32,7 @@
         <div class="form-group">
             <label class="col-md-3 control-label">Attributes:</label>
             <div class="col-md-8">
-                <div class="attr" ng-repeat="attr in model.attributes">
+                <div class="attr" ng-repeat="attr in model.$attributes">
                     <label class="control-label" for="{{attr.id}}">{{attr.id}}: {{attr.base}} +</label>
                     <input
                         ng-model="attr.value" id="{{attr.id}}" name="{{attr.id}}"

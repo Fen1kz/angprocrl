@@ -67,11 +67,11 @@ angular.module('AndProcRLData')
             //    }
             //}, true);
 
-            //$scope.$watch('model.attributes', function(newAttributes) {
-            //    $scope._attributes_diff = _.reduce(newAttributes, function(memo, attr){
-            //        return memo + (+attr.value || 0);
-            //    }, 0);
-            //}, true);
+            $scope.$watch('model.$attributes', function(newAttributes) {
+                $scope._attributes_diff = _.reduce(newAttributes, function(memo, attr){
+                    return memo + (+attr.$value || 0);
+                }, 0);
+            }, true);
 
             /*
              ===== Setup popover =====
@@ -153,20 +153,20 @@ angular.module('AndProcRLData')
         $scope.$modal = $modal;
 
         $scope.parentClasses = [];
-        var roots = _.filter($scope.data.classes, function(e){return e.parent === void 0;});
+        var roots = _.filter(CCService.data, function(e){return e.parentID === void 0;});
         var findParentClasses = function(parents) {
             _.each(parents, function(parent){
                 if (parent.id !== $scope.model.id) {
-                    $scope.parentClasses.push(parent.id);
-                    findParentClasses(_.filter($scope.data.classes, 'parent', parent.id));
+                    $scope.parentClasses.push(parent);
+                    findParentClasses(_.filter(CCService.data, 'parentID', parent.id));
                 }
             });
         };
         findParentClasses(roots);
 
-        $scope.$watch('model.parentID', function(){
-            CCService.update();
-        });
+        //$scope.$watch('model.parentID', function(){
+        //    CCService.update();
+        //});
 
         /*
          ===== Buttons =====
@@ -184,6 +184,13 @@ angular.module('AndProcRLData')
         /*
          ===== Drag And Drop =====
          */
+
+        $scope.$watch('model.parentID', function(newParentID, oldParentID){
+            console.log('changed',oldParentID, newParentID);
+            if (newParentID != oldParentID) {
+                $scope.model.$linkTo(newParentID);
+            }
+        });
 
         $scope.$on('$destroy', function(){
             $('.character-class-form').find('.select-parent').off('.dnd');

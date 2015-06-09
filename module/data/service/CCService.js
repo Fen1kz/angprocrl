@@ -1,16 +1,15 @@
 angular.module('data')
 .run(function(CCService){
         //console.log('run phase')
-        CCService.importData([
-            {name: 'Fighter', parent: 'Adventurer'}
-            ,{name: 'Adventurer'}
-        ]);
-    //CCService.start();
+        //CCService.importData([
+        //    {name: 'Fighter', parent: 'Adventurer'}
+        //    ,{name: 'Adventurer'}
+        //]);
+    CCService.start();
+    window.CCService = CCService;
 })
-.service('CCService', function ($rootScope, $window, dataService,
-                                       charClassSet, CharClass) {
-    var recursiveImport = function(seed) {
-    };
+.service('CCService', function ($rootScope, $window, dataService, charClassSet, CharClass) {
+    var MAX_IMPORT_DEPTH = 50;
     var service = {
         $: charClassSet
         ,get data () {
@@ -30,7 +29,7 @@ angular.module('data')
             this.flush();
             console.debug('imported')
 
-            for (var i = 50; i > 0 && seeds.length > 0; --i) {
+            for (var i = MAX_IMPORT_DEPTH; i > 0 && seeds.length > 0; --i) {
                 seeds = _.filter(seeds, function (seed){
                     if (!seed.parent || charClassSet.byName(seed.parent)) {
                         new CharClass(seed.name)
@@ -50,6 +49,5 @@ angular.module('data')
             //})
         }
     };
-    window.CCService = service;
     return service;
 });

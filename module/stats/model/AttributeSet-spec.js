@@ -40,10 +40,10 @@ describe('AttributeSet TEST', function () {
         var attributes31 = new AttributeSet(1, 2);
         var attributes32 = new AttributeSet(1, 2);
         var attributes32child = new AttributeSet(2, 1);
-        attributes1.$linkChild(attributes2);
-        attributes2.$linkChild(attributes3);
-        attributes3.$linkChild(attributes31);
-        attributes3.$linkChild(attributes32);
+        attributes2 .$linkTo(attributes1);
+        attributes3 .$linkTo(attributes2);
+        attributes31.$linkTo(attributes3);
+        attributes32.$linkTo(attributes3);
         expect(attributes1.toArray()).toEqual ([1, 2, 0,0,0,0,0,0]);
         expect(attributes2.toArray()).toEqual ([2, 4, 0,0,0,0,0,0]);
         expect(attributes3.toArray()).toEqual ([3, 6, 0,0,0,0,0,0]);
@@ -57,13 +57,13 @@ describe('AttributeSet TEST', function () {
         expect(attributes3.toArray()).toEqual ([5, 5, 5,0,0,0,0,0]);
         expect(attributes31.toArray()).toEqual([6, 7, 5,0,0,0,0,0]);
 
-        attributes3.$unlinkChild(attributes32);
+        attributes32.$unlinkFrom(attributes3);
         expect(attributes32.toArray()).toEqual([1, 2, 0,0,0,0,0,0]);
 
-        attributes32.$linkChild(attributes32child);
+        attributes32child.$linkTo(attributes32);
         expect(attributes32child.toArray()).toEqual([3, 3, 0,0,0,0,0,0]);
 
-        attributes3.$linkChild(attributes32);
+        attributes32.$linkTo(attributes3);
         expect(attributes32.toArray()).toEqual([6, 7, 5,0,0,0,0,0]);
         expect(attributes32child.toArray()).toEqual([8, 8, 5,0,0,0,0,0]);
     }));

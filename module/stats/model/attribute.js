@@ -57,16 +57,16 @@ angular.module('stats')
                 }, this);
             }
         }
-        ,$linkChild: function(childAttribute) {
-            if (childAttribute.$parent) throw new Error('Attribute::$parent exists');
-            childAttribute.$parent = this;
-            childAttribute.base(this.value());
-            this.$children.push(childAttribute);
+        ,$linkTo: function(parentAttribute) {
+            if (this.$parent) throw new Error('Attribute::$parent exists');
+            this.$parent = parentAttribute;
+            this.base(parentAttribute.value());
+            parentAttribute.$children.push(this);
         }
-        ,$unlinkChild: function(childAttribute) {
-            childAttribute.$parent = null;
-            childAttribute.base(0);
-            _.remove(this.$children, 'id', childAttribute.id);
+        ,$unlinkFrom: function(parentAttribute) {
+            this.$parent = void 0;
+            this.base(0);
+            _.remove(parentAttribute.$children, 'id', this.id);
         }
     });
 

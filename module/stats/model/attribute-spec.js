@@ -27,15 +27,15 @@ describe('Attributes TEST', function () {
         var STR4 = Attribute.STR.new();
         var STR41 = Attribute.STR.new();
         var STR42 = Attribute.STR.new();
-        STR1.$linkChild(STR2);
-        STR2.$linkChild(STR3);
-        STR3.$linkChild(STR4);
+        STR2.$linkTo(STR1);
+        STR3.$linkTo(STR2);
+        STR4.$linkTo(STR3);
 
-        STR3.$linkChild(STR31);
-        STR3.$linkChild(STR32);
+        STR31.$linkTo(STR3);
+        STR32.$linkTo(STR3);
 
-        STR4.$linkChild(STR41);
-        STR4.$linkChild(STR42);
+        STR41.$linkTo(STR4);
+        STR42.$linkTo(STR4);
 
         STR1.value(1);
         expect(STR1.value()).toEqual(1);
@@ -56,15 +56,15 @@ describe('Attributes TEST', function () {
         expect(STR4.value()).toEqual(3);
         expect(STR41.value()).toEqual(3);
         expect(STR42.value()).toEqual(3);
-        STR3.$unlinkChild(STR4);
+        STR4.$unlinkFrom(STR3);
         expect(STR4.value()).toEqual(1);
         expect(STR41.value()).toEqual(1);
         expect(STR42.value()).toEqual(1);
-        STR4.$unlinkChild(STR42);
+        STR42.$unlinkFrom(STR4);
         expect(STR41.value()).toEqual(1);
         expect(STR42.value()).toEqual(0);
-        STR4.$linkChild(STR42);
-        STR3.$linkChild(STR4);
+        STR42.$linkTo(STR4);
+        STR4.$linkTo(STR3);
         expect(STR4.value()).toEqual(3);
         expect(STR41.value()).toEqual(3);
         expect(STR42.value()).toEqual(3);
